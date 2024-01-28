@@ -129,11 +129,21 @@ def source_code_to_hash(code_lines: list[str]) -> str:
     return enc.hexdigest()
 
 
+def get_problem_id(
+    oj_name: str, 
+    problem_number: str,
+    configs: dict[str, str] = get_github_action_var(),
+) -> int:
+    url = f"{configs['API_SOLUTION_URL']}/problem/problem-id"
+    params = {"oj_name": oj_name, "problem_number": problem_number}
+    return requests.get(url, params=params).json()["id"]
+
+
 def update_solutions(
     solution_data: SolutionData,
     configs: dict[str, str] = get_github_action_var(),
     access_token: str = get_access_token(),
-    problem_id_info: dict[str, dict[str, int]] = make_problem_dict(),
+    # problem_id_info: dict[str, dict[str, int]] = make_problem_dict(),
 ):
     for oj_name in OJ_NAMES:
         root_path = f"solutions/{oj_name}/**/*.*"
@@ -189,7 +199,7 @@ def update_solutions(
             
             description = f"```{EXTENSION_TO_CODE[ext]}\n{code}\n```\n\n{solution_description}"
             
-            problem_id = problem_id_info[oj_name][pid]
+            problem_id = get_problem_id(oj_name=oj_name, problem_number=pid)
 
             url = f"{configs['API_SOLUTION_URL']}/problem/{problem_id}/solution"
 
