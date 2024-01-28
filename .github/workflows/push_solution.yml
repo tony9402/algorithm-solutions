@@ -1,0 +1,35 @@
+name: Auto Solution Upload
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      API_AUTH_URL: ${{ secrets.API_AUTH_URL }}
+      API_SOLUTION_URL: ${{ secrets.API_SOLUTION_URL }}
+      API_SYSTEM_USER_ID: ${{ secrets.API_SYSTEM_USER_ID }}
+      API_SYSTEM_USER_PW: ${{ secrets.API_SYSTEM_USER_PW }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+        architecture: 'x64'
+    - name: Setup pip
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Run python code
+      run: |
+        python scripts/push_solution.py
+    - name: Config Github
+      run: |
+        git config --local user.email "tony9402@naver.com"
+        git config --local user.name "tony9402"
+        git add solutions.json
+        git commit -m "Update Solution Data"
+        git push
