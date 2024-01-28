@@ -67,12 +67,12 @@ def make_problem_dict(
         
         step = 0
         while True:
-            # print(f"{oj_name} {200} {200 * step}")
+            # print(f"{oj_name} {500} {500 * step}")
             params = {
                 "oj_name": oj_name,
                 "orderby_column": "problem_id",
-                "limit": 200,
-                "offset": 200 * step
+                "limit": 500,
+                "offset": 500 * step
             }
 
             url = f"{configs['API_SOLUTION_URL']}/problem"
