@@ -139,6 +139,26 @@ def get_problem_id(
     return requests.get(url, params=params).json()["id"]
 
 
+def precheck_all_comment():
+    wrong_files = []
+
+    for oj_name in OJ_NAMES:
+        root_path = f"solutions/{oj_name}/**/*.*"
+        files = glob(root_path, recursive=True)
+        for file in files:
+            with open(file, 'r') as f:
+                code_lines = f.readlines()
+                f.close()
+            
+            res = parse_metadata(code_lines)
+            if len(res.keys()) != 3:
+                wrong_files.append(file)
+    
+    print(*wrong_files, sep='\n')
+    if len(wrong_files) > 0:
+        raise Exception("형식이 잘못된 솔루션이 있습니다.")
+
+
 def update_solutions(
     solution_data: SolutionData,
     configs: dict[str, str] = get_github_action_var(),
@@ -235,6 +255,7 @@ def update_solutions(
 
 if __name__ == "__main__":
     try:
+        precheck_all_comment()
         solution_data = SolutionData()
         update_solutions(solution_data=solution_data)
     except KeyboardInterrupt as e:

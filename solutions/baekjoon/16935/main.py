@@ -1,6 +1,6 @@
 # Authored by : chj3748
 # Co-authored by : -
-# http://boj.kr/8f470025f1ae478d8e24a0ff85d0d873
+# Link: http://boj.kr/8f470025f1ae478d8e24a0ff85d0d873
 import sys
 
 def input():

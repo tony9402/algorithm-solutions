@@ -1,6 +1,6 @@
-// author    : seastar105
-// Co-author : -
-// Link      : http://boj.kr/08105c2def084cadbdf8ee2e4549d525
+// Authored by    : seastar105
+// Co-authored by : -
+// Link           : http://boj.kr/08105c2def084cadbdf8ee2e4549d525
 #include<bits/stdc++.h>
 using namespace std;
 const int MAX = 100000;
