@@ -27,9 +27,12 @@ jobs:
       run: |
         python scripts/push_solution.py
     - name: Config Github
+      if: 
       run: |
-        git config --local user.email "tony9402@naver.com"
-        git config --local user.name "tony9402"
-        git add solutions.json
-        git commit -m "Update Solution Data"
-        git push
+        if [[ ! $(git diff --name-only solutions.json) ]]; then
+          git config --local user.email "tony9402@naver.com"
+          git config --local user.name "tony9402"
+          git add solutions.json
+          git commit -m "Update Solution Data"
+          git push
+        fi
