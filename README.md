@@ -84,6 +84,22 @@ Pull Request에 대한 설명은 [여기](https://wayhome25.github.io/git/2017/0
 - Rule 3 : Pull Request (PR) 하나 당 솔루션 하나만 있어야 합니다. 같은 문제여도 언어마다 다르게 PR을 보내야 합니다. 이는 관리의 편의성을 위해 적용합니다.
 - Rule 4 : `Allow edits by maintainers` 옵션을 허용으로 둬야합니다.
 - ~~Rule 5 : 분류에 맞는 솔루션을 올려야 합니다.~~
+- Rule 5 : 맨 아래에 코드에 대한 풀이를 올려주세요.
+
+```text
+C, C++, Java인 경우 
+/* Solution Description
+~~ 솔루션 설명
+*/
+
+Python인 경우
+""" Solution Description
+~~ 솔루션 설명
+"""
+
+각 언어의 주석에 맞게 변경해주시면 됩니다.
+```
+
 - Rule 6 : 1 Tab == 4 space, 즉 들여쓰기는 반드시 공백문자 4개로 해야합니다.  
 
 #### C++
