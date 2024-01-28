@@ -1,20 +1,5 @@
 {
-    "baekjoon": {
-        "1000": {
-            "Main.java": {
-                "hash_value": "0f9589fec2d5ad374bad10e85fc3b322",
-                "sequence": 3
-            },
-            "main.cpp": {
-                "hash_value": "fce98aed9520a1998a882c1244da4233",
-                "sequence": 3
-            },
-            "main.py": {
-                "hash_value": "8e96a4a370a2ab5b8410016b1b46f4da",
-                "sequence": 3
-            }
-        }
-    },
+    "baekjoon": {},
     "programmers": {},
     "leetcode": {},
     "hackerrank": {}
