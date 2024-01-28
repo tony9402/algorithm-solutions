@@ -34,5 +34,9 @@ jobs:
           git config --local user.name "tony9402"
           git add solutions.json
           git commit -m "Update Solution Data"
-          git push
         fi
+    - name: Push
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
