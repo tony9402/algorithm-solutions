@@ -1,28 +1,64 @@
 // Authored by : rhljh201
-// Co-authored by : -
-// Link : http://boj.kr/05eb6ff96ddc4cf79efada85efcfaf03
-
-import java.util.Scanner;
+// Co-authored by : tony9402
+// Link : http://boj.kr/f527fd10e06b494e914855455f19a96a
+import java.util.*;
+import java.lang.*;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt()+1;
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
 
-        int[] O = new int[N];
-        int[] A = new int[N];
+        int[] O = new int[N + 1];
+        int[] A = new int[N + 1];
 
-        for(int i=1; i<N; i++){
-            O[i] = sc.nextInt();
+        for(int i=1; i<=N; i++){
+            O[i] = rd.nextInt();
             A[i] = A[i-1] + O[i];
         }
 
         long sum = 0;
-        for(int i=1; i<N; i++){
+        for(int i=1; i<=N; i++){
             sum += A[i-1]*O[i];
         }
 
         System.out.println(sum);
+    }
+
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            while(st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() { return Integer.parseInt(next()); }
+        long nextLong() { return Long.parseLong(next()); }
+        double nextDouble() { return Double.parseDouble(next()); }
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
     }
 }
 
