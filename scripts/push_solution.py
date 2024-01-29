@@ -6,34 +6,9 @@ from glob import glob
 from dotenv import load_dotenv
 import requests  # 2.31.0
 
-from utils import SolutionData
+from utils import SolutionData, parse_metadata, EXTENSION_TO_LANGUAGE, EXTENSION_TO_CODE, OJ_NAMES
 
 load_dotenv()
-
-
-EXTENSION_TO_LANGUAGE = {
-    "c": "C",
-    "cpp": "C++",
-    "py": "Python",
-    "java": "Java",
-    "kt": "Kotlin",
-    "js": "Javascript",
-    "rs": "Rust",
-    "swift": "Swift",
-    "go": "Go",
-}
-EXTENSION_TO_CODE = {
-    "c": "c",
-    "cpp": "cpp",
-    "py": "py",
-    "java": "java",
-    "kt": "kt",
-    "js": "js",
-    "rs": "rust",
-    "swift": "swift",
-    "go": "go"
-}
-OJ_NAMES = ["baekjoon", "leetcode", "programmers", "hackerrank"]
 
 
 def get_github_action_var(
@@ -107,20 +82,6 @@ def get_access_token(
 
     token["access_token"] = res.json()["access_token"]
     return token["access_token"]
-
-
-def parse_metadata(data: list[str]) -> dict[str, str]:
-    keys = ["Authored by", "Co-authored by", "Link"]
-
-    parsed_data = {}
-
-    for line in data[:3]:
-        for key in keys:
-            if key in line:
-                parsed_data[key] = line.split(key)[-1].split(':', 1)[-1].strip()
-                break
-
-    return parsed_data
 
 
 def source_code_to_hash(code_lines: list[str]) -> str:

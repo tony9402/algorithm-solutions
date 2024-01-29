@@ -2,6 +2,31 @@ import os
 import json
 
 
+EXTENSION_TO_LANGUAGE = {
+    "c": "C",
+    "cpp": "C++",
+    "py": "Python",
+    "java": "Java",
+    "kt": "Kotlin",
+    "js": "Javascript",
+    "rs": "Rust",
+    "swift": "Swift",
+    "go": "Go",
+}
+EXTENSION_TO_CODE = {
+    "c": "c",
+    "cpp": "cpp",
+    "py": "py",
+    "java": "java",
+    "kt": "kt",
+    "js": "js",
+    "rs": "rust",
+    "swift": "swift",
+    "go": "go"
+}
+OJ_NAMES = ["baekjoon", "leetcode", "programmers", "hackerrank"]
+
+
 class SolutionData:
     def __init__(self):
         with open("solutions.json", "r") as f:
@@ -52,3 +77,17 @@ class SolutionData:
         with open("solutions.json", "w") as f:
             json.dump(self.data, f, indent=4, ensure_ascii=False)
             f.close()
+
+
+def parse_metadata(data: list[str]) -> dict[str, str]:
+    keys = ["Authored by", "Co-authored by", "Link"]
+
+    parsed_data = {}
+
+    for line in data[:3]:
+        for key in keys:
+            if key in line:
+                parsed_data[key] = line.split(key)[-1].split(':', 1)[-1].strip()
+                break
+
+    return parsed_data
