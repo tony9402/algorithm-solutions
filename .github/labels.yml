@@ -1,0 +1,48 @@
+- color: 1D76DB
+  description: "솔루션 PR"
+  name: "solution"
+- color: 1D76DB
+  description: "형식에 맞지 않는 Pull Request"
+  name: "Wrong PR"
+
+- color: FEF2C0
+  description: "C"
+  name: "C"
+- color: FEF2C0
+  description: "C++"
+  name: "C++"
+- color: FEF2C0
+  description: "Python"
+  name: "Python"
+- color: FEF2C0
+  description: "Java"
+  name: "Java"
+- color: FEF2C0
+  description: "Kotlin"
+  name: "Kotlin"
+- color: FEF2C0
+  description: "Javascript"
+  name: "Javascript"
+- color: FEF2C0
+  description: "Rust"
+  name: "Rust"
+- color: FEF2C0
+  description: "Swift"
+  name: "Swift"
+- color: FEF2C0
+  description: "Go"
+  name: "Go"
+
+- color: 5319E7
+  description: "baekjoon"
+  name: "baekjoon"
+- color: 5319E7
+  description: "programmers"
+  name: "programmers"
+- color: 5319E7
+  description: "leetcode"
+  name: "leetcode"
+- color: 5319E7
+  description: "hackerrank"
+  name: "hackerrank"
+
