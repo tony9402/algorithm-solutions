@@ -1,37 +1,32 @@
 // Authored by : rhljh201
-// Co-authored by : -
-// Link : http://boj.kr/d56fa13141ac45c5a002f923de801da2
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+// Co-authored by : tony9402
+// Link : http://boj.kr/4fdd45f2774645908eac3abcabfe01d3
+import java.io.*;
+import java.util.*;
+import java.lang.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        FastReader rd = new FastReader();
 
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        int N = rd.nextInt();
+        int M = rd.nextInt();
 
         int[] A = new int[N];
         int[] B = new int[M];
 
-        st = new StringTokenizer(br.readLine(), " ");
         for(int i=0; i<N; i++){
-            A[i] = Integer.parseInt(st.nextToken());
+            A[i] = rd.nextInt();
         }
 
-        st = new StringTokenizer(br.readLine(), " ");
         for(int i = 0; i<M; i++){
-            B[i] = Integer.parseInt(st.nextToken());
+            B[i] = rd.nextInt();
         }
 
         int x = 0;
         int y = 0;
         StringBuilder sb = new StringBuilder();
-				// 정렬
+        // 정렬
         for(int i=0; i<M+N; i++){
             if(x == N) sb.append(B[y++]).append(" ");
             else if(y == M) sb.append(A[x++]).append(" ");
@@ -40,11 +35,45 @@ public class Main {
                 else if (A[x] <= B[y]) sb.append(A[x++]).append(" ");
             }
         }
-        sb.delete(sb.length()-1, sb.length());
         System.out.println(sb);
+    }
 
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            while(st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() { return Integer.parseInt(next()); }
+        long nextLong() { return Long.parseLong(next()); }
+        double nextDouble() { return Double.parseDouble(next()); }
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
     }
 }
+
 /* Solution Description
-정렬된 배열을 입력받은 후 투 포인터를 비교하면서 작은 값부터 새로운 배열에 넣어주었다.
+정렬된 두 배열을 입력받은 후 투 포인터를 비교하면서 작은 값부터 새로운 배열에 넣어주면 하나의 정렬된 배열로 합칠 수 있다.
 */
