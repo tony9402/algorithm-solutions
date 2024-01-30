@@ -1,18 +1,17 @@
 // Authored by: tony9402
-// Co-authored by: -
+// Co-authored by: lms0806
 // Link: http://boj.kr/3b60c2a75fbc4c1cb0b1571046ceae36
-import java.util.*;
-import java.io.*;
-import java.lang.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
-public class Main{
-	public static void main(String[] args){
-		Scanner sc = new Scanner(System.in);
+public class Main {
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		int a = sc.nextInt();
-		int b = sc.nextInt();
-
-		System.out.println(a+b);
+		System.out.print(Integer.parseInt(st.nextToken()) + Integer.parseInt(st.nextToken()));
 	}
 }
 
