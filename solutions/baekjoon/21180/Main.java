@@ -1,6 +1,6 @@
 //Authored by : qudfbf2
 //Co-authored by : -
-//Link : boj.kr/835735b341ba46abb792c749652b34f9
+//Link : http://boj.kr/835735b341ba46abb792c749652b34f9
 
 import java.util.*;
 import java.io.*;
