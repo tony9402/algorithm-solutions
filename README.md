@@ -84,7 +84,7 @@ Pull Request에 대한 설명은 [여기](https://wayhome25.github.io/git/2017/0
 - Rule 3 : Pull Request (PR) 하나 당 솔루션 하나만 있어야 합니다. 같은 문제여도 언어마다 다르게 PR을 보내야 합니다. 이는 관리의 편의성을 위해 적용합니다.
 - Rule 4 : `Allow edits by maintainers` 옵션을 허용으로 둬야합니다.
 - ~~Rule 5 : 분류에 맞는 솔루션을 올려야 합니다.~~
-- Rule 5 : 맨 아래에 코드에 대한 풀이를 올려주세요.
+- Rule 5 : 맨 아래에 코드에 대한 풀이를 올려주세요. PR에도 어떤 방식으로 풀었는지 간단하게 자신의 풀이를 남겨주세요.
 
 ```text
 C, C++, Java인 경우 
@@ -104,54 +104,28 @@ Python인 경우
 
 #### C++
 
-- Rule 7 : 솔루션에는 `bits/stdc++.h` 헤더파일만 존재해야합니다. 다른 해더파일이 있으면 안됩니다.  
-- Rule 8 : 입출력은 C++ stream을 이용해야 합니다. `ios::sync_with_stdio(false); cin.tie(nullptr);`이 main 함수 안에 맨 첫줄에 있어야 합니다. `endl` 대신 `'\n'`을 써야합니다.  
-- Rule 9 : `#define, typedef`는 `typedef long long ll;` 또는 `#define ll long long`만 허용됩니다.  
-- Rule 10 : 논리 연산자인 `and, or`인 경우는 반드시 `&&, ||` 로 사용해야 합니다.  
-- Rule 11 : 반드시 실수 연산을 해야하는 경우는 `float`보단 `double`로 사용해주세요. 이 외에는 반드시 정수에서 연산을 해주세요.
-- Rule 12 : `queue, priority_queue, stack, list` 등과 같은 자료구조는 STL을 이용해주세요.
-- Rule 13 : 문자열은 반드시 `char*`대신 `string`을 이용해주세요. <!--*-->
-- Rule 14 : `goto`문을 쓰지 말아주세요.
-- Rule 15 : `class`보단 `struct`를 이용해주세요.
-
-#### Python
-
-- Rule 16 : (백준 문제 한정) 입력시 [해당 코드](http://boj.kr/e94b3c2e8dce4332b75806ff58c2981d) 처럼 input 함수를 만들어 입력을 받아야 합니다.
-
-#### Java
-
-- Rule 17 : (백준 문제 한정) [해당 코드](http://boj.kr/474912cdad044873b6aa14e34643f7b7) 처럼 FastReader Class를 이용해서 입력을 받아야 합니다.
+- Rule 7 : 입출력은 C++ stream을 이용해야 합니다. `ios::sync_with_stdio(false); cin.tie(nullptr);`이 main 함수 안에 맨 첫줄에 있어야 합니다. `endl` 대신 `'\n'`을 써야합니다.  
+- Rule 8 : `#define, typedef`는 `typedef long long ll;` 또는 `#define ll long long`만 허용됩니다.  
+- Rule 9 : 논리 연산자인 `and, or`인 경우는 반드시 `&&, ||` 로 사용해야 합니다.  
+- Rule 10 : 반드시 실수 연산을 해야하는 경우는 `float`보단 `double`로 사용해주세요. 이 외에는 반드시 정수에서 연산을 해주세요.
+- Rule 11 : `queue, priority_queue, stack, list` 등과 같은 자료구조는 STL을 이용해주세요.
+- Rule 12 : 문자열은 반드시 `char*`대신 `string`을 이용해주세요. 
+- Rule 13 : `goto`문을 쓰지 말아주세요.
 
 ### 권장 - 수정할 사항이 있으면 제가 직접 수정을 할 수 있습니다. 수정을 할 게 있다면 제 닉네임을 Co-Author에 추가합니다.
 
-- Rule 18 : 변수와 함수의 이름은 어느 정도 의미하는 바를 드러내면서도 코드가 간결하도록 최대 10 글자 이내로 해주세요.  
+#### Python
+
+- Rule 14 : (백준 문제 한정) 입력시 [해당 코드](http://boj.kr/e94b3c2e8dce4332b75806ff58c2981d) 처럼 input 함수를 만들어 입력을 받아야 합니다.
+
+#### Java
+
+- Rule 15 : (백준 문제 한정) [해당 코드](http://boj.kr/474912cdad044873b6aa14e34643f7b7) 처럼 FastReader Class를 이용해서 입력을 받아야 합니다.
+
+#### 공통
+
+- Rule 16 : 변수와 함수의 이름은 어느 정도 의미하는 바를 드러내면서도 코드가 간결하도록 최대 10 글자 이내로 해주세요.  
   `hap`, `gop`, `gaesan`와 같은 변수명이나 함수명은 사용하지 말아주세요.
-- Rule 19 : 한 줄짜리 `if, for, while` 문에는 중괄호를 쓰지 않는 것을 권장합니다.
-- Rule 20 : 반복문 안에서 `if` 문에 조건이 많은 경우 `continue, break`를 활용해주세요.  
-
-```cpp
-// 이 코드보다 아래있는 코드처럼 작성하시는 걸 권장합니다.
-for(int k=0;k<4;k++){
-    int qy = y + dy[k];
-    int qx = x + dx[k];
-    if(0 <= qy && qy < n && 0 <= qx && qx < n) {
-        if(Map[qy][qx] != '0') {
-            Map[qy][qx] = '0';
-            q.push(make_pair(qy, qx));
-        }
-    }
-}
-
-for(int k=0;k<4;k++){
-    int qy = y + dy[k];
-    int qx = x + dx[k];
-    if(0 > qy || qy >= n || 0 > qx || qx >= n) continue;
-    if(Map[qy][qx] == '0')continue;
-    Map[qy][qx] = '0';
-    q.push(make_pair(qy, qx));
-}
-```
-- Rule 21 : 불필요한 연산이 없도록 최대한 정리를 해주세요.
-- Rule 22 : 배열은 반드시 전역에 선언해주세요. 배열 사이즈는 엄청 타이트하게 잡지 말고 `+1 ~ +10` 정도로 넉넉하게 잡아주세요.
-- Rule 23 : 소스코드 일부에 어떤 코드인지 간단한 주석처리를 해주시면 감사하겠습니다. 다른 분들이 보실 때 코드만 볼 경우 이해가 안되는 경우가 있습니다.
-- Rule 24 : 어떤 방식으로 풀었는지 PR을 남기실 때 간단하게 자신의 풀이를 남겨주세요.
+- Rule 17 : 너무 많은 중첩 if문을 피해주세요.
+- Rule 18 : 불필요한 연산이 없도록 최대한 정리를 해주세요.
+- Rule 19 : 소스코드 일부에 어떤 코드인지 간단한 주석처리를 해주시면 감사하겠습니다. 다른 분들이 보실 때 코드만 볼 경우 이해가 안되는 경우가 있습니다.
