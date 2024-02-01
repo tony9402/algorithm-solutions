@@ -2604,6 +2604,13 @@
         }
     },
     "programmers": {},
-    "leetcode": {},
+    "leetcode": {
+        "9": {
+            "main.cpp": {
+                "hash_value": "4c89dad5b354a21ca693ccdf3b781855",
+                "sequence": 1
+            }
+        }
+    },
     "hackerrank": {}
 }
