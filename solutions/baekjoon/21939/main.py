@@ -1,6 +1,6 @@
 # Authored by: tony9402
 # Co-authored by: -
-# Link: 
+# Link: http://boj.kr/87e29ae241204a7d923fff68d173bcc9
 import sys
 import heapq
 
