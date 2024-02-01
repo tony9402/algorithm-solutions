@@ -2623,5 +2623,12 @@
             }
         }
     },
-    "hackerrank": {}
+    "hackerrank": {
+        "8137": {
+            "main.sql": {
+                "hash_value": "3000988498386259d04e4055eaaae9b8",
+                "sequence": 1
+            }
+        }
+    }
 }
