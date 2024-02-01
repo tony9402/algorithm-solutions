@@ -40,8 +40,14 @@
 
 프로그래머스는 문제를 들어가보면 주소창에 문제 번호가 있습니다. 예를 들어, `https://school.programmers.co.kr/learn/courses/30/lessons/151138`에서 151138이 알고리즘 번호로 생각하시면 됩니다. 따라서, 해당 경로는 아래처럼 위치하면 됩니다.
 
+`solutions/programmers/151138/main.py`
 `solutions/programmers/151138/main.sql`
 
+
+### 해커랭크
+[코딩테스트 대비 사이트](https://algorithm.tony9402.com/problem?oj_name=hackerrank&orderby_column=oj_problem_number&orderby=asc&page=1) 에서 해당 문제 번호로 올려주시면 됩니다. 예를 들어, "	Select All"이라는 문제에서 문제 번호는 8137입니다. 그러면 솔루션 경로는 아래처럼 위치하면 됩니다.
+
+`solutions/hackerrank/8137/main.sql`
 
 ## 💻 Contribute 에 대한 설명
 
@@ -73,12 +79,40 @@ Pull Request에 대한 설명은 [여기](https://wayhome25.github.io/git/2017/0
 
 - Rule 0 : (백준 문제 한정) **(모든 언어 공통)표준입출력으로 풀어야 합니다.**
 - Rule 1 : 다른 사람의 솔루션을 자신이 푼 것처럼 Pull Request (PR) 하시면 **절대❗️** 안됩니다.
-- Rule 2 : 아래와 같이 솔루션 맨 위에 정보를 **반드시** 넣어주세요. (Authored By에는 백준 닉네임으로 넣어야 합니다.)
+- Rule 2 : 아래와 같이 솔루션 맨 위에 정보를 **반드시** 넣어주세요. (Authored By에는 각 플랫폼 닉네임으로 넣어야 합니다.)
 
+#### 백준
+[해당 PR](https://github.com/tony9402/algorithm-solutions/pull/12)을 확인해주세요.
 ```cpp
 // Authored by : tony9402
 // Co-authored by : -
 // Link : http://boj.kr/3ee3d9284f2e4fd7b92b2a22e17d02d6
+```
+
+#### 릿코드
+[해당 PR](https://github.com/tony9402/algorithm-solutions/pull/16)을 확인해주세요.
+```cpp
+// Authored by : tony9402
+// Co-authored by : -
+// Link : https://leetcode.com/problems/palindrome-number/submissions/1163121115
+```
+
+#### 프로그래머스
+**Link는 빈칸으로 생략합니다.**  
+[해당 PR](https://github.com/tony9402/algorithm-solutions/pull/17)을 확인해주세요.
+```cpp
+// Authored by : tony9402
+// Co-authored by : -
+// Link : 
+```
+
+#### 해커랭크
+**Link는 빈칸으로 생략합니다.**  
+[해당 PR](https://github.com/tony9402/algorithm-solutions/pull/19)을 확인해주세요.
+```cpp
+// Authored by : tony9402
+// Co-authored by : -
+// Link : 
 ```
 
 - Rule 3 : Pull Request (PR) 하나 당 솔루션 하나만 있어야 합니다. 같은 문제여도 언어마다 다르게 PR을 보내야 합니다. 이는 관리의 편의성을 위해 적용합니다.
