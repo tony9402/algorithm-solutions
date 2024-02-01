@@ -29,7 +29,7 @@ jobs:
             script: |
               const { SOLUTION_PR, SOLUTION_PER_PR, METADATA, SOLUTION_PATH, SOLUTION_LANGUAGE, SOLUTION_AUTHOR, SOLUTION_DESCRIPTION, OJ_NAME, OJ_PROBLEM_NUMBER, OJ_URL } = require("./result.json");
               const languages = [
-                "C", "C++", "Python", "Java", "Kotlin", "Javascript", "Rust", "Swift", "Go"
+                "C", "C++", "Python", "Java", "Kotlin", "Javascript", "Rust", "Swift", "Go", "Sql"
               ];
               const oj_names = [
                 "baekjoon", "programmers", "leetcode", "hackerrank"
