@@ -26,6 +26,14 @@ jobs:
     - name: Run python code
       run: |
         python scripts/push_solution.py
+    - name: Pull
+      if: success()
+      uses: EndBug/add-and-commit@v9
+      with:
+        pull: "--rebase --autostash"
+        push: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     - name: Config Github
       if: 
       run: |
