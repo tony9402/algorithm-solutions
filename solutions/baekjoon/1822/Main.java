@@ -5,7 +5,7 @@
 import java.util.*;
 import java.io.*;
 
-public class Bj_1822 {
+public class Main {
     public static void main(String[] args) {
         FastReader rd = new FastReader();
         StringBuilder sb = new StringBuilder();
