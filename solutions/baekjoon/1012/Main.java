@@ -31,7 +31,9 @@ public class Main {
 
             while(k --> 0) {
                 st = new StringTokenizer(br.readLine());
-                arr[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())] = 1;
+                int x = Integer.parseInt(st.nextToken());
+                int y = Integer.parseInt(st.nextToken());
+                arr[x][y] = 1;
             }
 
             int answer = 0;
