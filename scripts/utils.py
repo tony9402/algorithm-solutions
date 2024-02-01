@@ -12,6 +12,7 @@ EXTENSION_TO_LANGUAGE = {
     "rs": "Rust",
     "swift": "Swift",
     "go": "Go",
+    "sql": "SQL",
 }
 EXTENSION_TO_CODE = {
     "c": "c",
@@ -22,7 +23,8 @@ EXTENSION_TO_CODE = {
     "js": "js",
     "rs": "rust",
     "swift": "swift",
-    "go": "go"
+    "go": "go",
+    "sql": "sql",
 }
 OJ_NAMES = ["baekjoon", "leetcode", "programmers", "hackerrank"]
 

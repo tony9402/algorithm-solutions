@@ -32,6 +32,9 @@
 - color: FEF2C0
   description: "Go"
   name: "Go"
+- color: FEF2C0
+  description: "Sql"
+  name: "Sql"
 
 - color: 5319E7
   description: "baekjoon"
