@@ -57,6 +57,22 @@ jobs:
                 }
                 
                 if(SOLUTION_PER_PR !== "True" || SOLUTION_PATH !== "True") {
+                  if(SOLUTION_PER_PR !== "True") {
+                    github.rest.issues.createComment({
+                      issue_number: context.issue.number,
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      body: "하나의 PR에는 하나의 솔루션을 업로드해야합니다."
+                    })
+                  }
+                  if(SOLUTION_PATH !== "True") {
+                    github.rest.issues.createComment({
+                      issue_number: context.issue.number,
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      body: "솔루션 경로가 올바른지 확인해주세요."
+                    })
+                  }
                   if (!Contain("Wrong PR")) {
                     github.rest.issues.addLabels({
                       issue_number: context.issue.number,
@@ -118,22 +134,24 @@ jobs:
                   }); 
                 }
 
-                if(METADATA === "True") {
-                  if(!Contain("solution")) {
-                    github.rest.issues.createComment({
-                      issue_number: context.issue.number,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      body: `솔루션을 올려주셔서 감사합니다.\n아래 정보가 맞는지 확인해주세요.\n\`\`\`\n작성자: ${SOLUTION_AUTHOR}\n언어: ${SOLUTION_LANGUAGE}\n사이트: ${OJ_NAME}\n풀이 설명: ${SOLUTION_DESCRIPTION}\n\`\`\``
-                    })
-                  }
-                  else {
-                    github.rest.issues.createComment({
-                      issue_number: context.issue.number,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      body: `변경 사항\n아래 정보가 맞는지 확인해주세요.\n\`\`\`\n작성자: ${SOLUTION_AUTHOR}\n언어: ${SOLUTION_LANGUAGE}\n사이트: ${OJ_NAME}\n풀이 설명: ${SOLUTION_DESCRIPTION}\n\`\`\``
-                    })
+                if(SOLUTION_PER_PR === "True" && SOLUTION_PATH === "True") {
+                  if(METADATA === "True") {
+                    if(!Contain("solution")) {
+                      github.rest.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: `솔루션을 올려주셔서 감사합니다.\n아래 정보가 맞는지 확인해주세요.\n\`\`\`\n작성자: ${SOLUTION_AUTHOR}\n언어: ${SOLUTION_LANGUAGE}\n사이트: ${OJ_NAME}\n풀이 설명: ${SOLUTION_DESCRIPTION}\n\`\`\``
+                      })
+                    }
+                    else {
+                      github.rest.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: `변경 사항\n아래 정보가 맞는지 확인해주세요.\n\`\`\`\n작성자: ${SOLUTION_AUTHOR}\n언어: ${SOLUTION_LANGUAGE}\n사이트: ${OJ_NAME}\n풀이 설명: ${SOLUTION_DESCRIPTION}\n\`\`\``
+                      })
+                    }
                   }
                 }
               }
