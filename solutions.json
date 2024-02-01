@@ -2603,7 +2603,14 @@
             }
         }
     },
-    "programmers": {},
+    "programmers": {
+        "181952": {
+            "main.cpp": {
+                "hash_value": "6a8fe076b1b2d3a0e7328dc1a0241b08",
+                "sequence": 1
+            }
+        }
+    },
     "leetcode": {
         "9": {
             "main.cpp": {
