@@ -2619,6 +2619,12 @@
                 "hash_value": "98c2b61dc5dbba9bb51702fc699e03b0",
                 "sequence": 1
             }
+        },
+        "18232": {
+            "Main.java": {
+                "hash_value": "2fe1474adab29cdfaaefec7c861eaad6",
+                "sequence": 1
+            }
         }
     },
     "programmers": {
