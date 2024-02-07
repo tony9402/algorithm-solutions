@@ -2691,6 +2691,12 @@
                 "hash_value": "e2d4b50992c536699c7563e5589428ea",
                 "sequence": 1
             }
+        },
+        "1497": {
+            "main.cpp": {
+                "hash_value": "89a2e90bc6c5bd9ad76340a5958161a9",
+                "sequence": 1
+            }
         }
     },
     "programmers": {
