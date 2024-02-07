@@ -2719,6 +2719,12 @@
                 "hash_value": "3fb46bb55b9021d22878eba8aa33b68e",
                 "sequence": 1
             }
+        },
+        "4354": {
+            "main.js": {
+                "hash_value": "5da7951530001316b25366764c611da8",
+                "sequence": 1
+            }
         }
     },
     "programmers": {
