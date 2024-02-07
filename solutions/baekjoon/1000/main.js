@@ -1,114 +1,66 @@
 // Authored by: tony9402
 // Co-authored by: -
-// Link: http://boj.kr/60894600e5de4926b0620c8cfca2a77f
+// Link: http://boj.kr/73e1dd289b10484bad7841763ef19fc4
 class InputModule {
     constructor() { 
-        this.buffer = require("fs").readFileSync("/dev/stdin").toString(); 
+        this.buffer = require("fs").readFileSync("/dev/stdin").toString().trim().split("\n").map(x => x.split(" ")); 
+        this.x = 0;
+        this.y = 0;
         this.pointer = 0;
     }
-    _read() {
-        if(this.pointer < this.buffer.length) {
-            return this.buffer[this.pointer ++];
+    _nextPointer() {
+        if(this.y === this.buffer.length) return;
+        if(this.x === this.buffer[this.y].length) {
+            this.x = 0;
+            if(++ this.y == this.buffer.length) return;
         }
-        return null;
+        if(this.pointer === this.buffer[this.y][this.x].length) {
+            this.x ++;
+            this.pointer = 0;
+        }
+        while(this.y < this.buffer.length && this.x === this.buffer[this.y].length) {
+            this.x = 0;
+            this.y ++;
+        }
+    }
+    _read() {
+        if(this.y === this.buffer.length) return null;
+        const ret = this.buffer[this.y][this.x][this.pointer ++];
+        this._nextPointer();
+        return ret;
     }
     ignore() {
-        while(this.pointer < this.buffer.length && this.buffer[this.pointer] === '\n') {
-            this.pointer ++;
-        }
+        this.x ++;
+        this.pointer = 0;
+        this._nextPointer();
     }
     readChar() {
-        var cur = this._read();
-        while(cur === ' ' || cur === '\n') cur = this._read();
-        return cur;
+        return this._read();
     }
     readString() {
-        var ret = "";
-        var cur = this._read();
-        while(cur === ' ' || cur === '\n') cur = this._read();
-        if(cur === null) return null;
-        while(true) {
-            ret += cur;
-            cur = this._read();
-            if(cur === ' ' || cur === '\n' || cur === null) break;
-        }
-        return ret; 
+        if(this.y === this.buffer.length) return null;
+        const ret = this.buffer[this.y][this.x].slice(this.pointer);
+        this.pointer = 0; 
+        this.x ++;
+        this._nextPointer();
+        return ret;
     }
     readLine() {
-        var ret = "";
-        var cur = this._read();
-        if(cur === null) return null;
-        while(cur !== '\n') {
-            ret += cur;
-            cur = this._read();
-            if(cur === null) break;
-        }
+        const ret = this.buffer[this.y].slice(this.x).join(' ');
+        this.y ++;
+        this.x = 0;
+        this.pointer = 0;
+        this._nextPointer();
         return ret;
     }
     readInt() {
-        var ret = 0;
-        var minus = false;
-        var cur = this._read();
-        while(cur === ' ' || cur === '\n') cur = this._read();
-        if(cur === null) return null;
-        if(cur === '-') {
-            minus = true;
-            cur = this._read();
-        }
-        while('0' <= cur && cur <= '9') {
-            ret = ret * 10 + +cur;
-            cur = this._read();
-            if(cur === null) break;
-        }
-        if(minus) ret *= -1;
-        return ret;
+        return Number.parseInt(this.readString());
     }
     readBigInt() {
-        var ret = "";
-        var minus = false;
-        var cur = this._read();
-        while(cur === ' ' || cur === '\n') cur = this._read();
-        if(cur === null) return null;
-        if(cur === '-') {
-            minus = true;
-            cur = this._read();
-        }
-        while('0' <= cur && cur <= '9') {
-            ret += cur;
-            cur = this._read();
-            if(cur === null) break;
-        }
-        return minus ? BigInt(`-${ret}`) : BigInt(ret);
+        return BigInt(this.readString());
     }
     readFloat() {
-        var ret = "";
-        var minus = false;
-        var cur = this._read();
-        while(cur === ' ' || cur === '\n') cur = this._read();
-        if(cur === null) return null;
-        if(cur === '-') {
-            minus = true;
-            cur = this._read();
-        }
-        while('0' <= cur && cur <= '9') {
-            ret += cur;
-            cur = this._read();
-            if(cur === null) {
-                ret = parseFloat(ret);
-                return minus ? -ret : ret;
-            }
-        }
-        if(cur === '.') {
-            ret += cur;
-            cur = this._read();
-        }
-        while('0' <= cur && cur <= '9') {
-            ret += cur;
-            cur = this._read();
-            if(cur === null) break;
-        }
-        ret = parseFloat(ret);
-        return minus ? -ret : ret;
+        return Number.parseFloat(this.readString());
     }
 }
 
@@ -129,9 +81,6 @@ class OutputModule {
             process.stdout.write(this.buffer.join(""));
             this.pointer = 0;
         }
-    }
-    finally() {
-        this.flush();
     }
 }
 const input = new InputModule();
