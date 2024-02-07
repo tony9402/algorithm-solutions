@@ -126,6 +126,10 @@
             "main.py": {
                 "hash_value": "2b656cfba5d43e741cb6fd8e026dfc24",
                 "sequence": 1
+            },
+            "main.cpp": {
+                "hash_value": "8cedbed69b4b549b279ae7b3e61b7ac8",
+                "sequence": 1
             }
         },
         "2217": {
