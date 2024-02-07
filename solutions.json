@@ -2701,6 +2701,12 @@
                 "hash_value": "89a2e90bc6c5bd9ad76340a5958161a9",
                 "sequence": 1
             }
+        },
+        "2602": {
+            "main.cpp": {
+                "hash_value": "3fb46bb55b9021d22878eba8aa33b68e",
+                "sequence": 1
+            }
         }
     },
     "programmers": {
