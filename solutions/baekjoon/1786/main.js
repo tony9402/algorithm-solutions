@@ -1,6 +1,7 @@
 // Authored by: tony9402
 // Co-authored by: -
-// Link: 
+// Link: http://boj.kr/78ab0b8ade084911a645f02953da83f9
+
 class InputModule {
     constructor(trim = false) { 
         this.buffer = require("fs").readFileSync("/dev/stdin").toString();
@@ -89,23 +90,43 @@ class OutputModule {
 const input = new InputModule();
 const output = new OutputModule();
 
-const N = input.readInt();
-const nextRight = new Array(N + 1);
-for(let i = 1; i <= N; ++i) {
-    const a = input.readInt();
-    const b = input.readInt();
-    const c = input.readInt();
-    nextRight[a] = c;
-}
+// KMP
+const getFailure = (str) => {
+    const failure = Array(str.length).fill(0);
+    for(let i = 1, j = 0; i < str.length; ++i) {
+        while(j > 0 && str[i] !== str[j]) j = failure[j - 1];
+        if(str[i] === str[j]) failure[i] = ++j;
+    }
+    return failure;
+};
 
-var ans = 2 * (N - 1);
-for(let cur = 1; nextRight[cur] !== -1; cur = nextRight[cur]) {
-    ans --;
+const solution = (X, Y) => {
+    const ret = Array();
+    const F = getFailure(Y);
+    for(let i = 0, j = 0; i < X.length; ++i) {
+        while(j > 0 && X[i] !== Y[j]) j = F[j - 1];
+        if(X[i] === Y[j]) {
+            if(j === Y.length - 1) {
+                ret.push(i - Y.length + 2);
+                j = F[j];
+            }
+            else {
+                j ++;
+            }
+        }
+    }
+    return ret;
+};
+
+const S = input.readLine(), T = input.readLine();
+const answer = solution(S, T);
+output.write(answer.length);
+output.write("\n");
+for(let i = 0; i < answer.length; ++i) {
+    output.write(answer[i]);
+    if(i + 1 !== answer.length) output.write(" ");
 }
-output.write(ans);
 output.flush();
 
 /* Solution Description
-잘 생각해보면 가장 루트에서 시작하여 가장 오른쪽으로 가는 경로를 제외하고는 2번 이동한다.  
-직접 유사 중위 순회를 구현해도 되지만, 잘 관찰을 하면 답은 2 * (N - 1) - (루트에서 시작해서 가장 오른쪽 노드까지 이동하는 횟수)가 되는 것을 알 수 있다.
 */

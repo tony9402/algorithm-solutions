@@ -1,9 +1,11 @@
 // Authored by: tony9402
 // Co-authored by: -
-// Link: http://boj.kr/73e1dd289b10484bad7841763ef19fc4
+// Link: http://boj.kr/f7efcb5893274b59995b6ab61734a790
 class InputModule {
-    constructor() { 
-        this.buffer = require("fs").readFileSync("/dev/stdin").toString().trim().split("\n").map(x => x.split(" ")); 
+    constructor(trim = false) { 
+        this.buffer = require("fs").readFileSync("/dev/stdin").toString();
+        if(trim) this.buffer = this.buffer.trim();
+        this.buffer = this.buffer.split("\n").map(x => x.split(" ")); 
         this.x = 0;
         this.y = 0;
         this.pointer = 0;
@@ -14,10 +16,6 @@ class InputModule {
             this.x = 0;
             if(++ this.y == this.buffer.length) return;
         }
-        if(this.pointer === this.buffer[this.y][this.x].length) {
-            this.x ++;
-            this.pointer = 0;
-        }
         while(this.y < this.buffer.length && this.x === this.buffer[this.y].length) {
             this.x = 0;
             this.y ++;
@@ -26,6 +24,10 @@ class InputModule {
     _read() {
         if(this.y === this.buffer.length) return null;
         const ret = this.buffer[this.y][this.x][this.pointer ++];
+        if(this.pointer === this.buffer[this.y][this.x].length) {
+            this.x ++;
+            this.pointer = 0;
+        }
         this._nextPointer();
         return ret;
     }
@@ -39,14 +41,15 @@ class InputModule {
     }
     readString() {
         if(this.y === this.buffer.length) return null;
-        const ret = this.buffer[this.y][this.x].slice(this.pointer);
+        const ret = this.buffer[this.y][this.x];
         this.pointer = 0; 
         this.x ++;
         this._nextPointer();
         return ret;
     }
     readLine() {
-        const ret = this.buffer[this.y].slice(this.x).join(' ');
+        if(this.y === this.buffer.length) return null;
+        const ret = this.buffer[this.y].join(' ');
         this.y ++;
         this.x = 0;
         this.pointer = 0;
@@ -71,14 +74,14 @@ class OutputModule {
         this.pointer = 0;
     }
     write(x) {
-        if(this.pointer == this.bufferMaxSize) {
+        if(this.pointer === this.bufferMaxSize) {
             this.flush();
         }
         this.buffer[this.pointer ++] = x;
     }
     flush() {
-        if(this.pointer !== 0) {
-            process.stdout.write(this.buffer.join(""));
+        if(this.pointer > 0) {
+            process.stdout.write(this.buffer.slice(0, this.pointer).join(""));
             this.pointer = 0;
         }
     }
