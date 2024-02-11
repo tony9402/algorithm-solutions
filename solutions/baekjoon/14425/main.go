@@ -35,7 +35,7 @@ func (fi *FastInputDto) _read() byte {
 		fi.reader.Read(fi.buffer)
 		fi.bufferPointer = 0
 	}
-	var ret = fi.buffer[fi.bufferPointer]
+	ret := fi.buffer[fi.bufferPointer]
 	fi.bufferPointer ++
 	if ret == 0 {
 		fi.eof = true
@@ -44,9 +44,9 @@ func (fi *FastInputDto) _read() byte {
 }
 
 func (fi *FastInputDto) readInt() int {
-	var ret = 0
-	var minus = false
-	var cur = fi._read()
+	ret := 0
+	minus := false
+	cur := fi._read()
 
 	for cur == 10 || cur == 32 {
 		cur = fi._read()
@@ -67,7 +67,7 @@ func (fi *FastInputDto) readInt() int {
 
 func (fi *FastInputDto) _readStringOrLine(line bool) string {
 	var ret strings.Builder
-	var cur = fi._read()
+	cur := fi._read()
 
 	for cur == 10 || cur == 32 {
 		if line && cur == 32 {
@@ -163,17 +163,17 @@ func main() {
 	input := FastInput()
 	output := FastOutput()
 	defer output.flush()
-	var N = input.readInt()
-	var M = input.readInt()
+	N := input.readInt()
+	M := input.readInt()
 
-	var mp = make(map[string]bool)
+	mp := make(map[string]bool)
 	for i := 1; i <= N; i++ {
-		var x = input.readString()
+		x := input.readString()
 		mp[x] = true
 	}
-	var answer = 0
+	answer := 0
 	for i := 1; i <= M; i++ {
-		var x = input.readString()
+		x := input.readString()
 		if mp[x] { answer ++ }
 	}
 	output.write(answer, "")
