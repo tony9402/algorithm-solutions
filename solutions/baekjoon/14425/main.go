@@ -179,7 +179,7 @@ func main() {
 	output.write(answer, "")
 }
 
-/*
+/* Solution Description
 map이나 set(S는 중복 원소가 없기 때문에 가능) 자료구조를 이용해서 문자열이 존재하는 개수를 세면 된다.  
 시간복잡도: O(MlogN)
 */
