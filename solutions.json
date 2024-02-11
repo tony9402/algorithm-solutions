@@ -1268,6 +1268,10 @@
             "main.cpp": {
                 "hash_value": "666bedc715f7431654e0d5377af086fa",
                 "sequence": 1
+            },
+            "main.go": {
+                "hash_value": "c565cc152c6e557b3ca4f75fd8b5e6e9",
+                "sequence": 1
             }
         },
         "22944": {
