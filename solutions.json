@@ -2756,6 +2756,10 @@
             "Main.java": {
                 "hash_value": "e5bdc19924c67b59801eaa44b50b2385",
                 "sequence": 1
+            },
+            "Main2.java": {
+                "hash_value": "cc88ee467d35ce3365818f544764f238",
+                "sequence": 2
             }
         }
     },
