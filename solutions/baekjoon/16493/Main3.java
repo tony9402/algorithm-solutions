@@ -83,7 +83,7 @@ i를 뒤에서부터 채워야 아이템을 한번씩 채울 수 있다.
 ```cpp
 for k 1...M
     for i N...1
-        DP[i] = max(DP[i - days[k]] + pages[k])
+        DP[i] = max(DP[i - pages[k]] + days[k])
 ```
 
 시간복잡도: O(6000M)
