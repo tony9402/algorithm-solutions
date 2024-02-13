@@ -143,7 +143,10 @@ def main(
             break
     
     if start_index != -1:
-        result["SOLUTION_DESCRIPTION"] = "".join(code_lines[start_index:])
+        result["SOLUTION_DESCRIPTION"] = "".join([
+            x.replace('`', '\\`') for x in 
+            code_lines[start_index+1:-1]
+        ])
     
     save_result(result)
 
