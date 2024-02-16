@@ -2814,6 +2814,10 @@
             "main.cpp": {
                 "hash_value": "50c31882bc7d36da8c11541f0ba70fb6",
                 "sequence": 1
+            },
+            "main2.cpp": {
+                "hash_value": "a6b1fb99cd2737e3c520b4284671b013",
+                "sequence": 2
             }
         }
     },
