@@ -82,6 +82,6 @@ while True:
         break
     
 """ Solution Description
-두 변 이상 실내온도의 공기와 접촉할 때 치즈가 녹는다는 조건만 잘 처리한다면, 여타 BFS 문제와 비슷하게 풀이할 수 있다.
+두 변 이상 실내온도의 공기와 접촉할 때 치즈가 녹는다는 조건만 잘 처리한다면, 여타 BFS 문제와 비슷하게 풀이할 수 있다.  
 https://wondev.tistory.com/202
 """
