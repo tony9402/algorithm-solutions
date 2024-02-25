@@ -2857,6 +2857,12 @@
                 "hash_value": "78301fb524170d8d404c058a565a2723",
                 "sequence": 1
             }
+        },
+        "2709": {
+            "main.cpp": {
+                "hash_value": "fd9b9279f5a70272f20ec23810f0931f",
+                "sequence": 1
+            }
         }
     },
     "hackerrank": {
