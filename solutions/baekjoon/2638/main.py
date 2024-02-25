@@ -9,12 +9,10 @@ def input():
 
 N, M = map(int, input().split())
 
-p = []
-for _ in range(N):
-    p.append(list(map(int, input().split())))
+p = [list(map(int, input().split())) for _ in range(N)]
     
-dr = [1, 0, -1, 0]
-dc = [0, 1, 0, -1]
+dr = (1, 0, -1, 0)
+dc = (0, 1, 0, -1)
 
 air = [[1]*M for _ in range(N)]
 
@@ -23,8 +21,7 @@ def BFS(r, c):
     while deq:
         nr, nc = deq.popleft()
         for i in range(4):
-            lr = nr+dr[i]
-            lc = nc+dc[i]
+            lr, lc = nr+dr[i], nc+dc[i]
         
             # 격자 벗어남 체크 / 공기 칸인지 체크 / bfs에서 이미 지나간 칸인 지 확인 (air[lr][lc])
             if 0 <= lr < N and 0 <= lc < M and p[lr][lc] == 0 and air[lr][lc] == 1:
@@ -46,8 +43,7 @@ while True:
             # 현재 칸이 외부와 닿아 있으면 isAirExposed = True.
             isAirExposed = False
             for i in range(4):
-                lr = r+dr[i]
-                lc = c+dc[i]
+                lr, lc = r+dr[i], c+dc[i]
                 if lr < 0 or lr >= N or lc < 0 or lc >= M:
                     isAirExposed = True
                     break
@@ -64,8 +60,7 @@ while True:
             
             cnt = 0
             for i in range(4):
-                lr = r+dr[i]
-                lc = c+dc[i]
+                lr, lc = r+dr[i], c+dc[i]
                 if air[lr][lc] == 0:
                     cnt += 1
             # 외부 공기와 2변 이상 닿으면, 치즈를 녹인다.
