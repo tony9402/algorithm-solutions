@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/vim,visualstudiocode,python,java,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=vim,visualstudiocode,python,java,dotenv
 
+### vscode ###
+.vscode/
+
 ### dotenv ###
 .env
 
