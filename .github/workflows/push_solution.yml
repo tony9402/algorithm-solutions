@@ -3,6 +3,9 @@ name: Auto Solution Upload
 on:
   push:
     branches: [ main ]
+  paths:
+    - 'solutions/**'
+    - 'scripts/**'
 
 jobs:
   build:
