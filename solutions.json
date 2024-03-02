@@ -2867,6 +2867,12 @@
                 "hash_value": "97ef43800ea6dada5e64bfd533e9e395",
                 "sequence": 1
             }
+        },
+        "977": {
+            "main.cpp": {
+                "hash_value": "0803272d3e9d2f3faa568117d631e2ec",
+                "sequence": 1
+            }
         }
     },
     "hackerrank": {
