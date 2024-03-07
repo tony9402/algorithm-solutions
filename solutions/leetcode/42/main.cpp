@@ -6,17 +6,17 @@ class Solution
 public:
     int trap(vector<int>& height)
     {
-        int n(height.size());
+        int n(height.size()); // int n = height.size(); 와 동일
 
-        auto pre(height);
+        auto pre(height); // vector<int> pre = height; 와 동일
 	    for (int i(1); i < n; i++)
 			pre[i] = max(pre[i - 1], height[i]);
 
-        auto suf(height);
+        auto suf(height); // vector<int> suf = height; 와 동일
 	    for (int i(n - 2); i >= 0; i--)
 		    suf[i] = max(suf[i + 1], height[i]);
 
-	    int ans{};
+	    int ans{}; // int ans = 0; 와 동일 (https://en.cppreference.com/w/cpp/language/value_initialization)
 	    for (int i(1); i < n - 1; i++)
 		    ans += max(0, min(pre[i - 1], suf[i + 1]) - height[i]);
 
