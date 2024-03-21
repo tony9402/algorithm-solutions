@@ -2837,6 +2837,12 @@
                 "hash_value": "1b3a882302722b37eb5539b317198e4b",
                 "sequence": 1
             }
+        },
+        "1689": {
+            "Main.java": {
+                "hash_value": "69af06d124e6cbf075fed1c4e3da0413",
+                "sequence": 1
+            }
         }
     },
     "programmers": {
