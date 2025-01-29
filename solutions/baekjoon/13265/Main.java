@@ -6,107 +6,107 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int T = rd.nextInt();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int T = rd.nextInt();
 
-		StringBuffer sb = new StringBuffer();
-		while (--T >= 0) {
-			int N = rd.nextInt();
-			int M = rd.nextInt();
+        StringBuffer sb = new StringBuffer();
+        while (--T >= 0) {
+            int N = rd.nextInt();
+            int M = rd.nextInt();
 
-			List<Integer> list[] = new ArrayList[N + 1];
-			for (int i = 1; i <= N; i++) {
-				list[i] = new ArrayList<>();
-			}
+            List<Integer> list[] = new ArrayList[N + 1];
+            for (int i = 1; i <= N; i++) {
+                list[i] = new ArrayList<>();
+            }
 
-			for (int i = 0; i < M; i++) {
-				int n1 = rd.nextInt();
-				int n2 = rd.nextInt();
+            for (int i = 0; i < M; i++) {
+                int n1 = rd.nextInt();
+                int n2 = rd.nextInt();
 
-				list[n1].add(n2);
-				list[n2].add(n1);
-			}
+                list[n1].add(n2);
+                list[n2].add(n1);
+            }
 
 
-			int[] g = new int[N + 1];
-			boolean check = true;
+            int[] g = new int[N + 1];
+            boolean check = true;
 
-			for (int i = 1; i <= N; i++) {
-				if (g[i] == 0) {
-					check = bfs(i, g, list);
-				}
-				if (!check) break;
-			}
+            for (int i = 1; i <= N; i++) {
+                if (g[i] == 0) {
+                    check = bfs(i, g, list);
+                }
+                if (!check) break;
+            }
 
-			if (!check) sb.append("im");
-			sb.append("possible").append("\n");
-		}
-		System.out.print(sb.toString());
-	}
+            if (!check) sb.append("im");
+            sb.append("possible").append("\n");
+        }
+        System.out.print(sb.toString());
+    }
 
-	private static boolean bfs(int st, int[] g, List<Integer> list[]) {
-		Queue<Integer> q = new LinkedList<>();
-		g[st] = 1;
-		q.add(st);
+    private static boolean bfs(int st, int[] g, List<Integer> list[]) {
+        Queue<Integer> q = new LinkedList<>();
+        g[st] = 1;
+        q.add(st);
 
-		while (!q.isEmpty()) {
-			int curr = q.poll();
+        while (!q.isEmpty()) {
+            int curr = q.poll();
 
-			for (int next : list[curr]) {
-				if (g[next] == g[curr]) return false;
+            for (int next : list[curr]) {
+                if (g[next] == g[curr]) return false;
 
-				if (g[next] == 0) {
-					g[next] = g[curr] * -1;
-					q.add(next);
-				}
-			}
-		}
+                if (g[next] == 0) {
+                    g[next] = g[curr] * -1;
+                    q.add(next);
+                }
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
