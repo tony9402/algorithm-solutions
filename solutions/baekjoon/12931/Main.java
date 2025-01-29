@@ -6,90 +6,90 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int N = rd.nextInt();
-		int a1[] = new int[N];
-		int a2[] = new int[N];
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
+        int a1[] = new int[N];
+        int a2[] = new int[N];
 
-		// 0
-		for (int i = 0; i < a1.length; i++) {
-			a1[i] = rd.nextInt();
-		}
+        // 0
+        for (int i = 0; i < a1.length; i++) {
+            a1[i] = rd.nextInt();
+        }
 
 
-		// a1 -> a2 만들기
-		int ret = 0;
-		while (!check(a1, a2)) {
-			// 홀수가 있는지 확인
-			boolean check = false;
-			for (int i = 0; i < N; i++) {
-				if (a1[i] % 2 == 1) {
-					check = true;
-					a1[i]--;
-					ret++;
-				}
-			}
+        // a1 -> a2 만들기
+        int ret = 0;
+        while (!check(a1, a2)) {
+            // 홀수가 있는지 확인
+            boolean check = false;
+            for (int i = 0; i < N; i++) {
+                if (a1[i] % 2 == 1) {
+                    check = true;
+                    a1[i]--;
+                    ret++;
+                }
+            }
 
-			// 다 짝수라면?
-			if (!check) {
-				for (int i = 0; i < N; i++) {
-					a1[i] /= 2;
-				}
-				ret++;
-			}
-		}
-		System.out.println(ret);
-	}
+            // 다 짝수라면?
+            if (!check) {
+                for (int i = 0; i < N; i++) {
+                    a1[i] /= 2;
+                }
+                ret++;
+            }
+        }
+        System.out.println(ret);
+    }
 
-	private static boolean check(int[] a1, int[] a2) {
-		for (int i = 0; i < a1.length; i++) {
-			if (a1[i] != a2[i]) return false;
-		}
-		return true;
-	}
+    private static boolean check(int[] a1, int[] a2) {
+        for (int i = 0; i < a1.length; i++) {
+            if (a1[i] != a2[i]) return false;
+        }
+        return true;
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
