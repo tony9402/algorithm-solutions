@@ -6,112 +6,112 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
 
-		HashMap<Integer, int[]> m = new HashMap<>();
-		Queue<int[]> q = new LinkedList<>();
-		int a[] = new int[]{0, 0, 0, 0, 0};
-		m.put(0, a);
-		q.add(a);
+        HashMap<Integer, int[]> m = new HashMap<>();
+        Queue<int[]> q = new LinkedList<>();
+        int a[] = new int[]{0, 0, 0, 0, 0};
+        m.put(0, a);
+        q.add(a);
 
-		while (!q.isEmpty()) {
-			int[] curr = q.poll();
-			int sum = curr[0] * 60 + curr[1] * 10 + curr[2] * -10 + curr[3] - curr[4];
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            int sum = curr[0] * 60 + curr[1] * 10 + curr[2] * -10 + curr[3] - curr[4];
 
-			// MINO
-			if (check(m, sum - 1)) {
-				m.put(sum - 1, new int[]{curr[0], curr[1], curr[2], curr[3], curr[4] + 1});
-				q.add(m.get(sum - 1));
-			}
+            // MINO
+            if (check(m, sum - 1)) {
+                m.put(sum - 1, new int[]{curr[0], curr[1], curr[2], curr[3], curr[4] + 1});
+                q.add(m.get(sum - 1));
+            }
 
-			// ADDO
-			if (check(m, sum + 1)) {
-				m.put(sum + 1, new int[]{curr[0], curr[1], curr[2], curr[3] + 1, curr[4]});
-				q.add(m.get(sum + 1));
-			}
+            // ADDO
+            if (check(m, sum + 1)) {
+                m.put(sum + 1, new int[]{curr[0], curr[1], curr[2], curr[3] + 1, curr[4]});
+                q.add(m.get(sum + 1));
+            }
 
-			// MINT
-			if (check(m, sum - 10)) {
-				m.put(sum - 10, new int[]{curr[0], curr[1], curr[2] + 1, curr[3], curr[4]});
-				q.add(m.get(sum - 10));
-			}
+            // MINT
+            if (check(m, sum - 10)) {
+                m.put(sum - 10, new int[]{curr[0], curr[1], curr[2] + 1, curr[3], curr[4]});
+                q.add(m.get(sum - 10));
+            }
 
-			// ADDT
-			if (check(m, sum + 10)) {
-				m.put(sum + 10, new int[]{curr[0], curr[1] + 1, curr[2], curr[3], curr[4]});
-				q.add(m.get(sum + 10));
-			}
+            // ADDT
+            if (check(m, sum + 10)) {
+                m.put(sum + 10, new int[]{curr[0], curr[1] + 1, curr[2], curr[3], curr[4]});
+                q.add(m.get(sum + 10));
+            }
 
-			// ADDH
-			if (check(m, sum + 60)) {
-				m.put(sum + 60, new int[]{curr[0] + 1, curr[1], curr[2], curr[3], curr[4]});
-				q.add(m.get(sum + 60));
-			}
-		}
+            // ADDH
+            if (check(m, sum + 60)) {
+                m.put(sum + 60, new int[]{curr[0] + 1, curr[1], curr[2], curr[3], curr[4]});
+                q.add(m.get(sum + 60));
+            }
+        }
 
-		int T = rd.nextInt();
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < T; i++) {
-			int time = rd.nextInt();
-			int ans[] = new int[]{0, 0, 0, 0, 0};
-			int ret = time / 60;
-			ans[0] = ret;
-			int[] rem = m.get(time % 60);
-			for (int j = 0; j < 5; j++) {
-				ans[j] += rem[j];
-				sb.append(ans[j]).append(" ");
-			}
-			sb.append("\n");
-		}
-		System.out.print(sb.toString());
-	}
+        int T = rd.nextInt();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < T; i++) {
+            int time = rd.nextInt();
+            int ans[] = new int[]{0, 0, 0, 0, 0};
+            int ret = time / 60;
+            ans[0] = ret;
+            int[] rem = m.get(time % 60);
+            for (int j = 0; j < 5; j++) {
+                ans[j] += rem[j];
+                sb.append(ans[j]).append(" ");
+            }
+            sb.append("\n");
+        }
+        System.out.print(sb.toString());
+    }
 
-	private static boolean check(HashMap<Integer, int[]> m, int next) {
-		return next >= 0 && next <= 60 && !m.containsKey(next);
-	}
+    private static boolean check(HashMap<Integer, int[]> m, int next) {
+        return next >= 0 && next <= 60 && !m.containsKey(next);
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
