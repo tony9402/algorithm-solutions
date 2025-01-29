@@ -6,125 +6,125 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
 
-		int N = rd.nextInt();
-		int S = rd.nextInt();
+        int N = rd.nextInt();
+        int S = rd.nextInt();
 
-		Car a[] = new Car[N];
-		for (int i = 0; i < N; i++) {
-			a[i] = new Car();
-			a[i].id = i;
-			a[i].pos = rd.nextInt();
-		}
+        Car a[] = new Car[N];
+        for (int i = 0; i < N; i++) {
+            a[i] = new Car();
+            a[i].id = i;
+            a[i].pos = rd.nextInt();
+        }
 
-		for (int i = 0; i < N; i++) {
-			a[i].cost = rd.nextInt();
-		}
+        for (int i = 0; i < N; i++) {
+            a[i].cost = rd.nextInt();
+        }
 
-		Arrays.sort(a);
+        Arrays.sort(a);
 
-		Queue<Integer> q = new LinkedList<>();
-		boolean visited[] = new boolean[N];
+        Queue<Integer> q = new LinkedList<>();
+        boolean visited[] = new boolean[N];
 
-		for (int i = 0; i < N; i++) {
-			if (a[i].id == S - 1) {
-				q.add(i);
-				visited[i] = true;
-				break;
-			}
-		}
-
-
-		while (!q.isEmpty()) {
-			int idx = q.poll();
-
-			for (int i = idx - 1; i >= 0; i--) {
-				if (a[idx].pos - a[idx].cost > a[i].pos) {
-					break;
-				}
-
-				if (visited[i]) continue;
-
-				visited[i] = true;
-				q.add(i);
-			}
+        for (int i = 0; i < N; i++) {
+            if (a[i].id == S - 1) {
+                q.add(i);
+                visited[i] = true;
+                break;
+            }
+        }
 
 
-			for (int i = idx + 1; i < N; i++) {
-				if (a[idx].pos + a[idx].cost < a[i].pos) {
-					break;
-				}
+        while (!q.isEmpty()) {
+            int idx = q.poll();
 
-				if (visited[i]) continue;
+            for (int i = idx - 1; i >= 0; i--) {
+                if (a[idx].pos - a[idx].cost > a[i].pos) {
+                    break;
+                }
 
-				visited[i] = true;
-				q.add(i);
-			}
-		}
+                if (visited[i]) continue;
+
+                visited[i] = true;
+                q.add(i);
+            }
 
 
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < N; i++) {
-			if (visited[i]) sb.append(i + 1).append(" ");
-		}
+            for (int i = idx + 1; i < N; i++) {
+                if (a[idx].pos + a[idx].cost < a[i].pos) {
+                    break;
+                }
 
-		System.out.print(sb.toString());
-	}
+                if (visited[i]) continue;
 
-	static class Car implements Comparable<Car> {
-		int id;
-		int pos;
-		int cost;
+                visited[i] = true;
+                q.add(i);
+            }
+        }
 
-		@Override
-		public int compareTo(Car o) {
-			return this.pos - o.pos;
-		}
-	}
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < N; i++) {
+            if (visited[i]) sb.append(i + 1).append(" ");
+        }
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        System.out.print(sb.toString());
+    }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+    static class Car implements Comparable<Car> {
+        int id;
+        int pos;
+        int cost;
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        @Override
+        public int compareTo(Car o) {
+            return this.pos - o.pos;
+        }
+    }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 
