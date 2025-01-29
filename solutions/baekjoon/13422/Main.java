@@ -6,83 +6,83 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int T = rd.nextInt();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int T = rd.nextInt();
 
-		StringBuffer sb = new StringBuffer();
-		while (--T >= 0) {
-			int N = rd.nextInt();
-			int M = rd.nextInt();
-			int K = rd.nextInt();
+        StringBuffer sb = new StringBuffer();
+        while (--T >= 0) {
+            int N = rd.nextInt();
+            int M = rd.nextInt();
+            int K = rd.nextInt();
 
-			int a[] = new int[N + M];
+            int a[] = new int[N + M];
 
-			for (int i = 1; i <= N; i++) {
-				a[i] = a[i - 1] + rd.nextInt();
-			}
+            for (int i = 1; i <= N; i++) {
+                a[i] = a[i - 1] + rd.nextInt();
+            }
 
-			if (N == M) {
-				sb.append(a[N] < K ? 1 : 0).append("\n");
-				continue;
-			}
+            if (N == M) {
+                sb.append(a[N] < K ? 1 : 0).append("\n");
+                continue;
+            }
 
-			int idx = N + 1;
-			for (int i = 1; i < M; i++) {
-				a[idx] = a[idx - 1] + a[i] - a[i - 1];
-				idx++;
-			}
+            int idx = N + 1;
+            for (int i = 1; i < M; i++) {
+                a[idx] = a[idx - 1] + a[i] - a[i - 1];
+                idx++;
+            }
 
-			int ret = 0;
-			for (int i = 0; i < N; i++) {
-				if (a[i + M] - a[i] < K) ret++;
-			}
-			sb.append(ret).append("\n");
-		}
-		System.out.print(sb.toString());
-	}
+            int ret = 0;
+            for (int i = 0; i < N; i++) {
+                if (a[i + M] - a[i] < K) ret++;
+            }
+            sb.append(ret).append("\n");
+        }
+        System.out.print(sb.toString());
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
