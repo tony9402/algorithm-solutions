@@ -6,71 +6,71 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int N = rd.nextInt();
-		int T = rd.nextInt();
-		int a[][] = new int[N][2];
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
+        int T = rd.nextInt();
+        int a[][] = new int[N][2];
 
-		for (int i = 0; i < N; i++) {
-			a[i][0] = rd.nextInt();
-			a[i][1] = rd.nextInt();
-		}
+        for (int i = 0; i < N; i++) {
+            a[i][0] = rd.nextInt();
+            a[i][1] = rd.nextInt();
+        }
 
-		Arrays.sort(a, (n1, n2) -> {
-			if (n1[1] == n2[1]) return n2[0] - n1[0];
-			return n2[1] - n1[1];
-		});
+        Arrays.sort(a, (n1, n2) -> {
+            if (n1[1] == n2[1]) return n2[0] - n1[0];
+            return n2[1] - n1[1];
+        });
 
-		int day = 1;
-		long sum = 0;
-		for (int i = 0; i < N; i++) {
-			sum += 1L * a[i][1] * (T - day++) + a[i][0];
-		}
-		System.out.println(sum);
-	}
+        int day = 1;
+        long sum = 0;
+        for (int i = 0; i < N; i++) {
+            sum += 1L * a[i][1] * (T - day++) + a[i][0];
+        }
+        System.out.println(sum);
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
@@ -90,3 +90,4 @@ public class Main {
 
 
  */
+
