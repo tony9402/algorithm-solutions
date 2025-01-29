@@ -6,87 +6,87 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int N = rd.nextInt();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
 
-		int[][] a1 = new int[N][N];
-		int[][] a2 = new int[N][N];
+        int[][] a1 = new int[N][N];
+        int[][] a2 = new int[N][N];
 
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				a1[i][j] = rd.nextInt();
-				a2[i][j] = a1[i][j];
-			}
-		}
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                a1[i][j] = rd.nextInt();
+                a2[i][j] = a1[i][j];
+            }
+        }
 
-		for (int k = 0; k < N; k++) {
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					if (i == j || j == k || k == i) continue;
+        for (int k = 0; k < N; k++) {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < N; j++) {
+                    if (i == j || j == k || k == i) continue;
 
-					if (a1[i][j] > a1[i][k] + a1[k][j]) {
-						System.out.println(-1);
-						return;
-					}
+                    if (a1[i][j] > a1[i][k] + a1[k][j]) {
+                        System.out.println(-1);
+                        return;
+                    }
 
-					if (a1[i][j] == a1[i][k] + a1[k][j]) {
-						a2[i][j] = 0;
-					}
-				}
-			}
-		}
+                    if (a1[i][j] == a1[i][k] + a1[k][j]) {
+                        a2[i][j] = 0;
+                    }
+                }
+            }
+        }
 
-		int sum = 0;
-		for (int i = 0; i < N; i++) {
-			for (int j = i + 1; j < N; j++) {
-				sum += a2[i][j];
-			}
-		}
-		System.out.println(sum);
-	}
+        int sum = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = i + 1; j < N; j++) {
+                sum += a2[i][j];
+            }
+        }
+        System.out.println(sum);
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
