@@ -6,76 +6,77 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
 
-		int N = rd.nextInt();
-		int K = rd.nextInt();
+        int N = rd.nextInt();
+        int K = rd.nextInt();
 
-		for (int i = N; i <= Integer.MAX_VALUE; i++) {
-//			int bit = 0;
-//			int cnt = 0;
-//			while (i >= (1 << bit)) {
-//				if ((i & 1 << bit) != 0) {
-//					cnt++;
-//				}
-//				bit++;
-//			}
+        for (int i = N; i <= Integer.MAX_VALUE; i++) {
+//            Integer.bitCount를 직접 구현하는 경우
+//            int bit = 0;
+//            int cnt = 0;
+//            while (i >= (1 << bit)) {
+//                if ((i & 1 << bit) != 0) {
+//                    cnt++;
+//                }
+//                bit++;
+//            }
 //
-//			if (cnt <= K) {
-//				System.out.println(i - N);
-//				return;
-//			}
+//            if (cnt <= K) {
+//                System.out.println(i - N);
+//                return;
+//            }
 
-			if (Integer.bitCount(i) <= K) {
-				System.out.println(i - N);
-				return;
-			}
-		}
-		System.out.println(-1);
-	}
+            if (Integer.bitCount(i) <= K) {
+                System.out.println(i - N);
+                return;
+            }
+        }
+        System.out.println(-1);
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
@@ -100,4 +101,3 @@ public class Main {
 	자바의 경우 `Integer.bitCount()` 라는 편리한 메서드가 있으니 이를 활용하자. (시간도 대폭 빨라진다.)
 
  */
-
