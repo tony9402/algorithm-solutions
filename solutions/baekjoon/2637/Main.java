@@ -6,94 +6,94 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int N = rd.nextInt();
-		int M = rd.nextInt();
-		int[] outDegree = new int[N + 1]; // 진출차수
-		int[] inDegree = new int[N + 1]; // 진입차수
-		List<int[]> list[] = new ArrayList[N + 1];
-		for (int i = 1; i <= N; i++) {
-			list[i] = new ArrayList<>();
-		}
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
+        int M = rd.nextInt();
+        int[] outDegree = new int[N + 1]; // 진출차수
+        int[] inDegree = new int[N + 1]; // 진입차수
+        List<int[]> list[] = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
+            list[i] = new ArrayList<>();
+        }
 
-		for (int i = 0; i < M; i++) {
-			int n1 = rd.nextInt();
-			int n2 = rd.nextInt();
-			int cnt = rd.nextInt();
+        for (int i = 0; i < M; i++) {
+            int n1 = rd.nextInt();
+            int n2 = rd.nextInt();
+            int cnt = rd.nextInt();
 
-			list[n1].add(new int[]{n2, cnt}); // 방향 그래프
-			outDegree[n1]++;
-			inDegree[n2]++;
-		}
+            list[n1].add(new int[]{n2, cnt}); // 방향 그래프
+            outDegree[n1]++;
+            inDegree[n2]++;
+        }
 
-		Queue<Integer> q = new LinkedList<>();
+        Queue<Integer> q = new LinkedList<>();
 
-		int[] dp = new int[N + 1];
-		q.add(N);
-		dp[N] = 1;
-		while (!q.isEmpty()) {
-			int curr = q.poll();
+        int[] dp = new int[N + 1];
+        q.add(N);
+        dp[N] = 1;
+        while (!q.isEmpty()) {
+            int curr = q.poll();
 
-			for (int[] next : list[curr]) {
-				dp[next[0]] += dp[curr] * next[1];
-				inDegree[next[0]]--;
-				if (inDegree[next[0]] == 0) {
-					q.add(next[0]);
-				}
-			}
-		}
-		StringBuilder sb = new StringBuilder();
-		for (int i = 1; i <= N; i++) {
-			if (outDegree[i] == 0) {
-				sb.append(i).append(" ").append(dp[i]).append("\n");
-			}
-		}
-		System.out.print(sb.toString());
-	}
+            for (int[] next : list[curr]) {
+                dp[next[0]] += dp[curr] * next[1];
+                inDegree[next[0]]--;
+                if (inDegree[next[0]] == 0) {
+                    q.add(next[0]);
+                }
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
+            if (outDegree[i] == 0) {
+                sb.append(i).append(" ").append(dp[i]).append("\n");
+            }
+        }
+        System.out.print(sb.toString());
+    }
 
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
