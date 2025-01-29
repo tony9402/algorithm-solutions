@@ -6,111 +6,111 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	private static long s, t;
+    private static long s, t;
 
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
 
-		s = rd.nextLong();
-		t = rd.nextLong();
+        s = rd.nextLong();
+        t = rd.nextLong();
 
-		if (s == t) {
-			System.out.println(0);
-			return;
-		}
+        if (s == t) {
+            System.out.println(0);
+            return;
+        }
 
-		Queue<Node> q = new LinkedList<>();
-		HashSet<Long> h_set = new HashSet<>();
-		q.add(new Node(s * s, "*"));
-		h_set.add(s * s);
-		q.add(new Node(s + s, "+"));
-		h_set.add(s + s);
-		q.add(new Node(1L, "/"));
-		h_set.add(1L);
-
-
-		boolean check = false;
-		while (!q.isEmpty()) {
-			Node curr = q.poll();
-			if (curr.num == t) {
-				System.out.println(curr.str);
-				check = true;
-				q.clear();
-				break;
-			}
-
-			if (curr.num > 1e9) continue;
-
-			long num = curr.num;
-			if (!h_set.contains(num * num)) {
-				h_set.add(num * num);
-				q.add(new Node(num * num, curr.str + "*"));
-			}
-
-			if (!h_set.contains(num + num)) {
-				h_set.add(num + num);
-				q.add(new Node(num + num, curr.str + "+"));
-			}
+        Queue<Node> q = new LinkedList<>();
+        HashSet<Long> h_set = new HashSet<>();
+        q.add(new Node(s * s, "*"));
+        h_set.add(s * s);
+        q.add(new Node(s + s, "+"));
+        h_set.add(s + s);
+        q.add(new Node(1L, "/"));
+        h_set.add(1L);
 
 
-		}
+        boolean check = false;
+        while (!q.isEmpty()) {
+            Node curr = q.poll();
+            if (curr.num == t) {
+                System.out.println(curr.str);
+                check = true;
+                q.clear();
+                break;
+            }
 
-		if (!check) System.out.println(-1);
-	}
+            if (curr.num > 1e9) continue;
+
+            long num = curr.num;
+            if (!h_set.contains(num * num)) {
+                h_set.add(num * num);
+                q.add(new Node(num * num, curr.str + "*"));
+            }
+
+            if (!h_set.contains(num + num)) {
+                h_set.add(num + num);
+                q.add(new Node(num + num, curr.str + "+"));
+            }
 
 
-	static class Node {
-		long num;
-		String str;
+        }
 
-		Node(long num, String str) {
-			this.num = num;
-			this.str = str;
-		}
+        if (!check) System.out.println(-1);
+    }
 
-	}
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class Node {
+        long num;
+        String str;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        Node(long num, String str) {
+            this.num = num;
+            this.str = str;
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+    }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
@@ -136,4 +136,3 @@ public class Main {
     b. `*,+` 연산 시 `int` 범위를 넘어갈 수 있다.
 
  */
-
