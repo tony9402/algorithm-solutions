@@ -6,107 +6,107 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int N = rd.nextInt();
-		int M = rd.nextInt();
-		int X = rd.nextInt();
-		int Y = rd.nextInt();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
+        int M = rd.nextInt();
+        int X = rd.nextInt();
+        int Y = rd.nextInt();
 
 
-		int INF = (int) 1e7 + 4;
-		int[] dist = new int[N];
-		Arrays.fill(dist, INF);
+        int INF = (int) 1e7 + 4;
+        int[] dist = new int[N];
+        Arrays.fill(dist, INF);
 
 
-		List<int[]> list[] = new ArrayList[N];
-		for (int i = 0; i < N; i++) {
-			list[i] = new ArrayList<>();
-		}
+        List<int[]> list[] = new ArrayList[N];
+        for (int i = 0; i < N; i++) {
+            list[i] = new ArrayList<>();
+        }
 
-		for (int i = 0; i < M; i++) {
-			int n1 = rd.nextInt();
-			int n2 = rd.nextInt();
-			int d = rd.nextInt();
-			list[n1].add(new int[]{n2, d});
-			list[n2].add(new int[]{n1, d});
-		}
+        for (int i = 0; i < M; i++) {
+            int n1 = rd.nextInt();
+            int n2 = rd.nextInt();
+            int d = rd.nextInt();
+            list[n1].add(new int[]{n2, d});
+            list[n2].add(new int[]{n1, d});
+        }
 
-		PriorityQueue<int[]> pq = new PriorityQueue<>((n1, n2) -> n1[1] - n2[1]);
-		pq.add(new int[]{Y, 0});
-		dist[Y] = 0;
+        PriorityQueue<int[]> pq = new PriorityQueue<>((n1, n2) -> n1[1] - n2[1]);
+        pq.add(new int[]{Y, 0});
+        dist[Y] = 0;
 
-		while (!pq.isEmpty()) {
-			int[] curr = pq.poll();
+        while (!pq.isEmpty()) {
+            int[] curr = pq.poll();
 
-			for (int[] next : list[curr[0]]) {
-				if (dist[next[0]] > curr[1] + next[1]) {
-					dist[next[0]] = curr[1] + next[1];
-					pq.add(new int[]{next[0], dist[next[0]]});
-				}
-			}
-		}
+            for (int[] next : list[curr[0]]) {
+                if (dist[next[0]] > curr[1] + next[1]) {
+                    dist[next[0]] = curr[1] + next[1];
+                    pq.add(new int[]{next[0], dist[next[0]]});
+                }
+            }
+        }
 
-		Arrays.sort(dist);
-		int sum = 0;
-		int ans = 1;
-		for (int i = 0; i < dist.length; i++) {
-			if (dist[i] * 2 > X) {
-				ans = -1;
-				break;
-			}
+        Arrays.sort(dist);
+        int sum = 0;
+        int ans = 1;
+        for (int i = 0; i < dist.length; i++) {
+            if (dist[i] * 2 > X) {
+                ans = -1;
+                break;
+            }
 
-			sum += dist[i] * 2;
-			if (sum > X) {
-				sum = dist[i] * 2;
-				ans++;
-			}
-		}
+            sum += dist[i] * 2;
+            if (sum > X) {
+                sum = dist[i] * 2;
+                ans++;
+            }
+        }
 
-		System.out.println(ans);
-	}
+        System.out.println(ans);
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
