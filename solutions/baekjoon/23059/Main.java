@@ -6,122 +6,122 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int N = rd.nextInt();
-		// 아이템 -> idx
-		TreeMap<String, Integer> m = new TreeMap<>();
-		// 아이템 -> 아이템
-		TreeMap<String, List<String>> mm = new TreeMap<>();
-		int[] inDegree = new int[N * 2 + 4];
-		int idx = 0;
-		for (int i = 0; i < N; i++) {
-			String i1 = rd.next();
-			String i2 = rd.next();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
+        // 아이템 -> idx
+        TreeMap<String, Integer> m = new TreeMap<>();
+        // 아이템 -> 아이템
+        TreeMap<String, List<String>> mm = new TreeMap<>();
+        int[] inDegree = new int[N * 2 + 4];
+        int idx = 0;
+        for (int i = 0; i < N; i++) {
+            String i1 = rd.next();
+            String i2 = rd.next();
 
-			if (!m.containsKey(i1)) m.put(i1, idx++);
-			if (!m.containsKey(i2)) m.put(i2, idx++);
+            if (!m.containsKey(i1)) m.put(i1, idx++);
+            if (!m.containsKey(i2)) m.put(i2, idx++);
 
-			if (!mm.containsKey(i1)) mm.put(i1, new ArrayList<>());
-			if (!mm.containsKey(i2)) mm.put(i2, new ArrayList<>());
+            if (!mm.containsKey(i1)) mm.put(i1, new ArrayList<>());
+            if (!mm.containsKey(i2)) mm.put(i2, new ArrayList<>());
 
-			inDegree[m.get(i2)]++;
-			mm.get(i1).add(i2);
-		}
+            inDegree[m.get(i2)]++;
+            mm.get(i1).add(i2);
+        }
 
-		Queue<Node> q = new LinkedList<>();
+        Queue<Node> q = new LinkedList<>();
 
-		for (String item : m.keySet()) {
-			if (inDegree[m.get(item)] == 0) {
-				q.add(new Node(item, 0));
-			}
-		}
+        for (String item : m.keySet()) {
+            if (inDegree[m.get(item)] == 0) {
+                q.add(new Node(item, 0));
+            }
+        }
 
-		PriorityQueue<Node> pq = new PriorityQueue<>((n1, n2) -> {
-			if (n1.degree == n2.degree) return n1.item.compareTo(n2.item);
-			return n1.degree - n2.degree;
-		});
+        PriorityQueue<Node> pq = new PriorityQueue<>((n1, n2) -> {
+            if (n1.degree == n2.degree) return n1.item.compareTo(n2.item);
+            return n1.degree - n2.degree;
+        });
 
-		while (!q.isEmpty()) {
-			Node curr = q.poll();
-			pq.add(curr);
+        while (!q.isEmpty()) {
+            Node curr = q.poll();
+            pq.add(curr);
 
-			for (String next : mm.get(curr.item)) {
-				int nextIdx = m.get(next);
-				inDegree[nextIdx]--;
-				if (inDegree[nextIdx] == 0) {
-					q.add(new Node(next, curr.degree + 1));
-				}
-			}
-		}
-
-
-		if (idx != pq.size()) {
-			System.out.println(-1);
-			return;
-		}
-
-		StringBuilder sb = new StringBuilder();
-		while (!pq.isEmpty()) {
-			sb.append(pq.poll().item).append("\n");
-		}
-
-		System.out.print(sb.toString());
-	}
-
-	static class Node {
-		String item;
-		int degree;
-
-		Node(String item, int degree) {
-			this.item = item;
-			this.degree = degree;
-		}
+            for (String next : mm.get(curr.item)) {
+                int nextIdx = m.get(next);
+                inDegree[nextIdx]--;
+                if (inDegree[nextIdx] == 0) {
+                    q.add(new Node(next, curr.degree + 1));
+                }
+            }
+        }
 
 
-	}
+        if (idx != pq.size()) {
+            System.out.println(-1);
+            return;
+        }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+        while (!pq.isEmpty()) {
+            sb.append(pq.poll().item).append("\n");
+        }
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        System.out.print(sb.toString());
+    }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+    static class Node {
+        String item;
+        int degree;
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        Node(String item, int degree) {
+            this.item = item;
+            this.degree = degree;
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+    }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
