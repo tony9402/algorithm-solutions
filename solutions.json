@@ -2861,6 +2861,18 @@
                 "hash_value": "2b01bab68fca282c05d2664867b1a4a2",
                 "sequence": 1
             }
+        },
+        "1052": {
+            "Main.java": {
+                "hash_value": "b70954502402db0771adaefc936505ea",
+                "sequence": 4
+            }
+        },
+        "1034": {
+            "Main.java": {
+                "hash_value": "2cf25d18fa66b0d82e1edef11f4a09e1",
+                "sequence": 1
+            }
         }
     },
     "programmers": {
