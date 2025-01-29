@@ -2,11 +2,11 @@
 # Co-authored by : -
 # Link : http://boj.kr/171a010d7b2247588d9dba8b3fa192c2
 
-
 import heapq
 import sys
 
-input = sys.stdin.readline
+def input():
+    return sys.stdin.readline().rstrip()
 
 
 max_g_heap = [[] for _ in range(101)]
@@ -169,7 +169,7 @@ for _ in range(q):
             P = int(cmd[1])
             remove(P, l_lookup[P], g_lookup[P])
 
-"""
+""" Solution Description
 알고리즘 유형, 난이도별로 최대, 최소힙을 사용하여 문제를 저장하고, 힙에서 문제를 꺼낼 때 이미 삭제된 문제인지 확인한 다음, 조건에
 맞게 문제 번호를 출력했습니다.
 """
