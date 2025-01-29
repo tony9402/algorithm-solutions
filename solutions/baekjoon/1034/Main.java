@@ -6,86 +6,86 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	public static void main(String[] args) {
-		FastReader rd = new FastReader();
-		int N = rd.nextInt();
-		int M = rd.nextInt();
+    public static void main(String[] args) {
+        FastReader rd = new FastReader();
+        int N = rd.nextInt();
+        int M = rd.nextInt();
 
-		String a[] = new String[N];
+        String a[] = new String[N];
 
-		for (int i = 0; i < N; i++) {
-			a[i] = rd.next();
-		}
+        for (int i = 0; i < N; i++) {
+            a[i] = rd.next();
+        }
 
-		int K = rd.nextInt();
+        int K = rd.nextInt();
 
-		boolean visited[] = new boolean[N];
-		int ans = 0;
-		for (int i = 0; i < N; i++) {
-			if (visited[i]) continue;
+        boolean visited[] = new boolean[N];
+        int ans = 0;
+        for (int i = 0; i < N; i++) {
+            if (visited[i]) continue;
 
-			visited[i] = true;
-			int cnt = 0;
-			for (int j = 0; j < M; j++) {
-				if (a[i].charAt(j) == '0') cnt++;
-			}
+            visited[i] = true;
+            int cnt = 0;
+            for (int j = 0; j < M; j++) {
+                if (a[i].charAt(j) == '0') cnt++;
+            }
 
-			if (cnt <= K && cnt % 2 == K % 2) {
-				int max = 0;
-				for (int j = 0; j < N; j++) {
-					if (a[i].equals(a[j])) {
-						visited[j] = true;
-						max++;
-					}
-				}
-				ans = Math.max(max, ans);
-			}
-		}
+            if (cnt <= K && cnt % 2 == K % 2) {
+                int max = 0;
+                for (int j = 0; j < N; j++) {
+                    if (a[i].equals(a[j])) {
+                        visited[j] = true;
+                        max++;
+                    }
+                }
+                ans = Math.max(max, ans);
+            }
+        }
 
-		System.out.println(ans);
-	}
+        System.out.println(ans);
+    }
 
-	static class FastReader {
-		BufferedReader br;
-		StringTokenizer st;
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-		public FastReader() {
-			br = new BufferedReader(new InputStreamReader(System.in));
-		}
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
 
-		String next() {
-			while (st == null || !st.hasMoreElements()) {
-				try {
-					st = new StringTokenizer(br.readLine());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			return st.nextToken();
-		}
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-		long nextLong() {
-			return Long.parseLong(next());
-		}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-		String nextLine() {
-			String str = "";
-			try {
-				str = br.readLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return str;
-		}
-	}
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
 
 /* Solution Description
@@ -105,4 +105,3 @@ public class Main {
        짝수-홀수/홀수-짝수 의 경우는 동일한 상태가 되지 못하는 것이다.
 
  */
-
