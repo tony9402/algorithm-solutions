@@ -9,34 +9,29 @@ inputs = input()
 rs=[]
 stack=[]
 i_p={'+':1,'-':1,'*':2,'/':2, '(':4, ')':0} #stack에 들어갈 때
-s_p={'+':1,'-':1,'*':2,'/':2, '(':0} #stcak에서 나올 때
+s_p={'+':1,'-':1,'*':2,'/':2, '(':0} #stack에서 나올 때
 for i in inputs:
     if i.isalpha():
         rs.append(i)
     elif i == '(':
         stack.append(i)
     elif i ==')':
-        if stack:
-            while s_p[stack[-1]] >= i_p[i]:
-                if stack[-1]=='(':
-                    stack.pop()
-                    break
-                else:
-                    rs.append(stack.pop())
-                if not stack:
-                    break
-    else:
-        if stack:
-            while s_p[stack[-1]] >= i_p[i]:
+        while stack and s_p[stack[-1]] >= i_p[i]:
+            if stack[-1]=='(':
+                stack.pop()
+                break
+            else:
                 rs.append(stack.pop())
-                if not stack:
-                    break
+    else:
+        while stack and s_p[stack[-1]] >= i_p[i]:
+            rs.append(stack.pop())
         stack.append(i)
 while stack:
     rs.append(stack.pop())
 
 print(''.join(rs))
-'''
+
+''' Solution Description
 후위표기식을 만드는 문제
 스택을 이용해서 풀었다.
 1. 알파벳이면 결과에 바로 추가
