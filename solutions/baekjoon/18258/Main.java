@@ -79,3 +79,11 @@ public class Main {
         }
     }
 }
+
+/* Solution Description
+	1. 큐를 단순히 구현할 수 있지만, 이는 라이브코테에서 요구되는 방식이라고 판단하여
+	'빠르게' 풀어야 하는 코딩테스트에서는 java의 컬렉션 프레임워크를 사용하는 것이 적절하다고 판단했다.
+	2. 문제 제목은 queue지만, 뒤에서 peek하는 과정인 'back'을 요구하여 deque를 사용했다.
+	3. 또한, 가독성을 위하여 cmd.equals("push")를 if문으로 나열하기보다는
+	switch를 활용했다.
+ */
