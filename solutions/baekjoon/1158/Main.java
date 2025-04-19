@@ -1,6 +1,6 @@
 // Authored by : semInDev
 // Co-authored by : -
-// Link : https://www.acmicpc.net/problem/1158
+// Link : http://boj.kr/6a3de2f34e644e82a44ff0c1f7e16439
 
 import java.util.*;
 import java.io.*;
