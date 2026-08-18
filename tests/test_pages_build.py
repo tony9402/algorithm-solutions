@@ -126,6 +126,15 @@ class PagesBuildTest(unittest.TestCase):
         self.assertIn('href="/algorithm-solutions/problems/baekjoon/1000/"', index_html)
         self.assertIn('href="/algorithm-solutions/announcements/"', index_html)
 
+    def test_pages_include_browser_cache_control_meta(self) -> None:
+        index_html = (self.output / "index.html").read_text(encoding="utf-8")
+        self.assertIn(
+            '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">',
+            index_html,
+        )
+        self.assertIn('<meta http-equiv="Pragma" content="no-cache">', index_html)
+        self.assertIn('<meta http-equiv="Expires" content="0">', index_html)
+
     def test_announcements_render_as_closed_collapsible_title_list(self) -> None:
         environment = _make_environment(REPOSITORY_ROOT / "pages" / "templates", "")
         rendered = environment.get_template("announcements.html").render(
