@@ -3,6 +3,8 @@ from __future__ import annotations
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stdout
+from io import StringIO
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -16,9 +18,12 @@ from scripts.validate_solution_pr import (
     COMMENT_MARKER,
     Change,
     get_git_changes,
+    get_merge_base,
+    get_worktree_changes,
     render_pr_comment,
     validate_changes,
 )
+from scripts.precheck import validate_local_solutions
 
 
 CANONICAL_CPP = """// Authored by: contributor
@@ -137,6 +142,38 @@ problems: {}
 
         self.assertEqual(changes, [Change("A", path)])
         self.assertTrue(report.valid, [item.format() for item in report.errors])
+
+    def test_reads_tracked_and_untracked_worktree_changes(self) -> None:
+        tracked_path = "README.md"
+        untracked_path = "solutions/baekjoon/1000/main.cpp"
+        responses = [
+            SimpleNamespace(stdout=b"base-sha\n", stderr=b""),
+            SimpleNamespace(stdout=f"M\0{tracked_path}\0".encode(), stderr=b""),
+            SimpleNamespace(stdout=f"{untracked_path}\0".encode(), stderr=b""),
+        ]
+        with patch("scripts.validate_solution_pr.subprocess.run", side_effect=responses):
+            base_sha = get_merge_base(self.root, "origin/main")
+            changes = get_worktree_changes(self.root, base_sha)
+
+        self.assertEqual(base_sha, "base-sha")
+        self.assertEqual(
+            changes,
+            [Change("M", tracked_path), Change("A", untracked_path)],
+        )
+
+    def test_local_precheck_accepts_multiple_changed_solutions(self) -> None:
+        first = "solutions/baekjoon/1000/main.cpp"
+        second = "solutions/baekjoon/1001/main.cpp"
+        self._write(first)
+        self._write(second)
+
+        with redirect_stdout(StringIO()):
+            valid = validate_local_solutions(
+                self.root,
+                [Change("A", first), Change("A", second)],
+            )
+
+        self.assertTrue(valid)
 
     def test_renders_success_comment(self) -> None:
         path = "solutions/baekjoon/1000/main.cpp"

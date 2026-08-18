@@ -55,6 +55,25 @@ def _is_solution_path(path: str | None) -> bool:
     return bool(path) and (path == "solutions" or path.startswith("solutions/"))
 
 
+def _parse_name_status(output: bytes) -> list[Change]:
+    fields = output.decode("utf-8").split("\0")
+    changes: list[Change] = []
+    index = 0
+    while index < len(fields) and fields[index]:
+        status = fields[index]
+        index += 1
+        if status.startswith(("R", "C")):
+            old_path = fields[index]
+            new_path = fields[index + 1]
+            index += 2
+            changes.append(Change(status=status[0], path=new_path, old_path=old_path))
+        else:
+            path = fields[index]
+            index += 1
+            changes.append(Change(status=status[0], path=path))
+    return changes
+
+
 def get_git_changes(repository_root: Path, base_sha: str, head_sha: str) -> list[Change]:
     command = [
         "git",
@@ -71,21 +90,40 @@ def get_git_changes(repository_root: Path, base_sha: str, head_sha: str) -> list
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    fields = completed.stdout.decode("utf-8").split("\0")
-    changes: list[Change] = []
-    index = 0
-    while index < len(fields) and fields[index]:
-        status = fields[index]
-        index += 1
-        if status.startswith(("R", "C")):
-            old_path = fields[index]
-            new_path = fields[index + 1]
-            index += 2
-            changes.append(Change(status=status[0], path=new_path, old_path=old_path))
-        else:
-            path = fields[index]
-            index += 1
-            changes.append(Change(status=status[0], path=path))
+    return _parse_name_status(completed.stdout)
+
+
+def get_merge_base(repository_root: Path, base_ref: str) -> str:
+    completed = subprocess.run(
+        ["git", "merge-base", base_ref, "HEAD"],
+        cwd=repository_root,
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return completed.stdout.decode("utf-8").strip()
+
+
+def get_worktree_changes(repository_root: Path, base_sha: str) -> list[Change]:
+    tracked = subprocess.run(
+        ["git", "diff", "--name-status", "--find-renames", "-z", base_sha, "--"],
+        cwd=repository_root,
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    untracked = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard", "-z"],
+        cwd=repository_root,
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    changes = _parse_name_status(tracked.stdout)
+    known_paths = {change.path for change in changes}
+    for path in untracked.stdout.decode("utf-8").split("\0"):
+        if path and path not in known_paths:
+            changes.append(Change(status="A", path=path))
     return changes
 
 
