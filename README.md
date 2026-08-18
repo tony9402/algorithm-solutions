@@ -1,7 +1,7 @@
 # 문제 솔루션 모음집
 
 
-백준 문제집에서 여러 플랫폼의 문제들을 하나로 합친 [사이트](https://algorithm.tony9402.com)에도 같이 솔루션이 올라가는 레포지토리입니다.
+여러 온라인 저지의 문제 풀이를 한곳에 모아 GitHub Pages로 제공하는 저장소입니다.
 
 
 집단 지성 프로젝트를 [백준 문제집](https://github.com/tony9402/baekjoon)에서 진행하였지만 확장을 위해 솔루션만 따로 빼서 새로운 레포지토리로 이전을 하였습니다.
@@ -53,7 +53,7 @@
 
 
 ### 해커랭크
-[코딩테스트 대비 사이트](https://algorithm.tony9402.com/problem?oj_name=hackerrank&orderby_column=oj_problem_number&orderby=asc&page=1) 에서 해당 문제 번호로 올려주시면 됩니다. 예를 들어, "	Select All"이라는 문제에서 문제 번호는 8137입니다. 그러면 솔루션 경로는 아래처럼 위치하면 됩니다.
+HackerRank는 문제 URL만으로 숫자 식별자를 얻을 수 없으므로 maintainer가 배정한 양의 정수 식별자를 사용합니다. 새 문제를 추가할 때는 `pages/config.yaml`에도 문제 제목과 원문 URL을 함께 등록해야 합니다. 예를 들어 `Select All` 문제의 식별자가 8137이면 다음 경로를 사용합니다.
 
 `solutions/hackerrank/8137/main.sql`
 
