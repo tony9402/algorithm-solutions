@@ -11,16 +11,19 @@
     {% if announcements %}
     <div class="announcement-list">
         {% for announcement in announcements %}
-        <article id="notice-{{ announcement.announcement_id }}" class="announcement-card">
-            <header>
-                <div>
+        <details id="notice-{{ announcement.announcement_id }}" class="announcement-card">
+            <summary class="announcement-summary">
+                <span class="announcement-summary-main">
                     {% if announcement.is_recent %}<span class="new-badge">NEW</span>{% endif %}
-                    <h2>{{ announcement.title }}</h2>
-                </div>
-                <time datetime="{{ announcement.published_at.isoformat() }}">{{ announcement.published_label }}</time>
-            </header>
+                    <span class="announcement-title">{{ announcement.title }}</span>
+                </span>
+                <span class="announcement-meta">
+                    <time datetime="{{ announcement.published_at.isoformat() }}">{{ announcement.published_label }}</time>
+                    <span class="announcement-chevron" aria-hidden="true"></span>
+                </span>
+            </summary>
             <div class="announcement-body">{{ announcement.body_html|safe }}</div>
-        </article>
+        </details>
         {% endfor %}
     </div>
     {% else %}

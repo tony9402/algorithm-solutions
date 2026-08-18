@@ -4,6 +4,7 @@ import json
 import sys
 import tempfile
 import unittest
+from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -12,7 +13,8 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
-from pages.build import build_site
+from pages.announcements import Announcement
+from pages.build import _make_environment, build_site
 
 
 class _SourceCodeParser(HTMLParser):
@@ -123,6 +125,36 @@ class PagesBuildTest(unittest.TestCase):
         self.assertIn('href="/algorithm-solutions/assets/site.css"', index_html)
         self.assertIn('href="/algorithm-solutions/problems/baekjoon/1000/"', index_html)
         self.assertIn('href="/algorithm-solutions/announcements/"', index_html)
+
+    def test_announcements_render_as_closed_collapsible_title_list(self) -> None:
+        environment = _make_environment(REPOSITORY_ROOT / "pages" / "templates", "")
+        rendered = environment.get_template("announcements.html").render(
+            site={
+                "description": "test",
+                "repository_url": "https://github.com/example/repository",
+            },
+            page_title="공지사항",
+            active_nav="announcements",
+            problem_count=1,
+            solution_count=1,
+            recent_announcement_ids=["test-notice"],
+            announcements=[
+                Announcement(
+                    announcement_id="test-notice",
+                    title="테스트 공지",
+                    published_at=date(2026, 8, 18),
+                    published_label="2026. 08. 18.",
+                    body_html="<p>테스트 본문</p>",
+                    is_recent=True,
+                )
+            ],
+        )
+
+        details = '<details id="notice-test-notice" class="announcement-card">'
+        self.assertIn(details, rendered)
+        self.assertNotIn(f"{details[:-1]} open>", rendered)
+        self.assertIn('<summary class="announcement-summary">', rendered)
+        self.assertLess(rendered.index("테스트 공지"), rendered.index("테스트 본문"))
 
     def test_catalog_uses_pagination_without_author_search(self) -> None:
         index_html = (self.output / "index.html").read_text(encoding="utf-8")

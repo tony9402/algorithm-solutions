@@ -570,35 +570,69 @@ select {
     box-shadow: 0 8px 28px rgba(23, 32, 51, 0.04);
 }
 
-.announcement-card > header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+.announcement-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
     gap: 24px;
     padding: 24px 28px;
-    border-bottom: 1px solid var(--line);
     background: linear-gradient(120deg, #fff, #f7f9ff);
+    cursor: pointer;
+    list-style: none;
+    transition: background 160ms ease;
 }
 
-.announcement-card > header > div {
+.announcement-summary::-webkit-details-marker {
+    display: none;
+}
+
+.announcement-summary:hover,
+.announcement-card[open] > .announcement-summary {
+    background: linear-gradient(120deg, #f9fbff, #f1f5ff);
+}
+
+.announcement-summary:focus-visible {
+    outline: 3px solid rgba(47, 91, 234, 0.26);
+    outline-offset: -3px;
+}
+
+.announcement-summary-main {
     display: flex;
     min-width: 0;
     align-items: center;
     gap: 10px;
 }
 
-.announcement-card h2 {
-    margin: 0;
+.announcement-title {
     font-size: 22px;
+    font-weight: 850;
     line-height: 1.35;
     letter-spacing: -0.025em;
 }
 
-.announcement-card time {
-    flex: none;
+.announcement-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.announcement-meta time {
     color: var(--muted);
     font-size: 13px;
     font-weight: 700;
+}
+
+.announcement-chevron {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--subtle);
+    border-bottom: 2px solid var(--subtle);
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 160ms ease;
+}
+
+.announcement-card[open] .announcement-chevron {
+    transform: rotate(225deg) translate(-2px, -2px);
 }
 
 .new-badge {
@@ -616,6 +650,7 @@ select {
 
 .announcement-body {
     padding: 26px 28px 30px;
+    border-top: 1px solid var(--line);
     color: #39445a;
 }
 
@@ -1073,16 +1108,24 @@ select {
         padding-block: 48px 72px;
     }
 
-    .announcement-card > header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
+    .announcement-summary {
+        align-items: start;
+        gap: 16px;
         padding: 20px;
     }
 
-    .announcement-card > header > div {
+    .announcement-summary-main {
         align-items: flex-start;
         flex-direction: column;
+        gap: 7px;
+    }
+
+    .announcement-title {
+        font-size: 19px;
+    }
+
+    .announcement-meta {
+        gap: 12px;
     }
 
     .announcement-body {
