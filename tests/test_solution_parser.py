@@ -90,7 +90,7 @@ class SolutionParserTest(unittest.TestCase):
         self.assertEqual(metadata["Co-authored by"], "-")
         self.assertEqual(metadata["Link"], "http://boj.kr/value")
 
-    def test_all_ten_allowed_languages_parse_in_strict_mode(self) -> None:
+    def test_all_ten_allowed_languages_accept_empty_description_in_strict_mode(self) -> None:
         self.assertEqual(len(LANGUAGE_SPECS), 10)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -99,9 +99,9 @@ class SolutionParserTest(unittest.TestCase):
                 path = root / "solutions" / "baekjoon" / str(index) / f"{stem}.{spec.extension}"
                 path.parent.mkdir(parents=True)
                 if spec.description_kind == "python":
-                    description = '""" Solution Description\n설명\n"""\n'
+                    description = '""" Solution Description\n"""\n'
                 else:
-                    description = "/* Solution Description\n설명\n*/\n"
+                    description = "/* Solution Description\n*/\n"
                 code = "SELECT 1;" if spec.extension == "sql" else "solution code"
                 path.write_text(
                     f"{spec.line_comment} Authored by: author\n\n{code}\n\n{description}",
@@ -114,6 +114,8 @@ class SolutionParserTest(unittest.TestCase):
                     result.valid,
                     f"{spec.language}: {[item.format() for item in result.errors]}",
                 )
+                assert result.solution is not None
+                self.assertIsNone(result.solution.solution_description)
 
     def test_repository_baseline_parses_without_errors(self) -> None:
         paths = sorted((REPOSITORY_ROOT / "solutions").glob("*/*/*"))

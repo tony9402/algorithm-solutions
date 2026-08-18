@@ -108,6 +108,19 @@ problems: {}
         self.assertFalse(report.valid)
         self.assertTrue(any(item.code == "SOL007" for item in report.errors))
 
+    def test_accepts_empty_description_block(self) -> None:
+        path = "solutions/baekjoon/1000/main.cpp"
+        self._write(
+            path,
+            CANONICAL_CPP.replace("상수 시간에 답을 구한다.\n", ""),
+        )
+
+        report = validate_changes(self.root, [Change("M", path)])
+
+        self.assertTrue(report.valid, [item.format() for item in report.errors])
+        assert report.solution is not None
+        self.assertFalse(report.solution["has_solution_description"])
+
     def test_rejects_unsafe_submission_url(self) -> None:
         path = "solutions/baekjoon/1000/main.cpp"
         self._write(
@@ -167,13 +180,28 @@ problems: {}
         self._write(first)
         self._write(second)
 
-        with redirect_stdout(StringIO()):
+        config = {
+            "platforms": {
+                "baekjoon": {
+                    "label": "Baekjoon",
+                    "problem_url_template": "https://www.acmicpc.net/problem/{problem_id}",
+                }
+            },
+            "problems": {},
+        }
+        with (
+            patch("scripts.precheck.load_config", return_value=config) as preload_config,
+            patch("scripts.validate_solution_pr.load_config") as per_file_load_config,
+            redirect_stdout(StringIO()),
+        ):
             valid = validate_local_solutions(
                 self.root,
                 [Change("A", first), Change("A", second)],
             )
 
         self.assertTrue(valid)
+        preload_config.assert_called_once_with(self.root / "pages" / "config.yaml")
+        per_file_load_config.assert_not_called()
 
     def test_renders_success_comment(self) -> None:
         path = "solutions/baekjoon/1000/main.cpp"

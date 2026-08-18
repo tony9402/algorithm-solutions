@@ -41,6 +41,12 @@
 
 `solutions/leetcode/1074/main.cpp`
 
+프리미엄 문제를 제외한 모든 LeetCode 문제의 제목과 원문 URL을 `pages/config.yaml`에 갱신하려면 저장소 루트에서 다음 명령을 실행합니다.
+
+```bash
+make update-leetcode
+```
+
 ![Alt text](https://github.com/tony9402/algorithm-solutions/assets/30228292/5eb500e5-85d7-4dd6-88a9-3368b2585800)
 
 
@@ -126,17 +132,15 @@ Pull Request에 대한 설명은 [여기](https://wayhome25.github.io/git/2017/0
 - Rule 3 : Pull Request (PR) 하나 당 솔루션 하나만 있어야 합니다. 같은 문제여도 언어마다 다르게 PR을 보내야 합니다. 이는 관리의 편의성을 위해 적용합니다.
 - Rule 4 : `Allow edits by maintainers` 옵션을 허용으로 둬야합니다.
 - ~~Rule 5 : 분류에 맞는 솔루션을 올려야 합니다.~~
-- Rule 5 : 맨 아래에 코드에 대한 풀이를 올려주세요. PR에도 어떤 방식으로 풀었는지 간단하게 자신의 풀이를 남겨주세요.
+- Rule 5 : 맨 아래에 `Solution Description` 블록을 추가해주세요. 풀이 설명은 작성할 내용이 있을 때 블록 안에 적고, 없으면 블록을 비워둘 수 있습니다.
 
 ```text
 C, C++, Java인 경우 
 /* Solution Description
-~~ 솔루션 설명
 */
 
 Python인 경우
 """ Solution Description
-~~ 솔루션 설명
 """
 
 각 언어의 주석에 맞게 변경해주시면 됩니다.
@@ -150,7 +154,7 @@ Python인 경우
 - `solutions/{플랫폼}/{문제 번호}/{파일명}` 경로와 허용 언어/파일명을 검사합니다.
 - `Authored by`가 파일 첫 줄부터 표준 주석 형식으로 작성되었는지 검사합니다.
 - 선택적인 공동 작성자와 제출 링크가 올바른 형식인지 검사합니다.
-- 신규·수정 솔루션에는 비어 있지 않고 정상적으로 닫힌 `Solution Description`이 있어야 합니다.
+- 신규·수정 솔루션에는 정상적으로 닫힌 `Solution Description` 블록이 있어야 하며, 내용은 비어 있어도 됩니다.
 - 메타데이터와 설명을 제외한 실제 코드가 있어야 합니다.
 - LeetCode/HackerRank처럼 문제 번호만으로 URL을 만들 수 없으면 `pages/config.yaml`에 문제 링크를 등록해야 합니다.
 

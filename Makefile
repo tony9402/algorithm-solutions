@@ -1,11 +1,12 @@
 PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 BASE_REF ?= origin/main
 
-.PHONY: help precheck checkall
+.PHONY: help precheck checkall update-leetcode
 
 help:
 	@echo "make precheck                 전체 솔루션 형식만 점검"
 	@echo "make checkall                 형식·테스트·Pages 빌드 전체 점검"
+	@echo "make update-leetcode          LeetCode 무료 문제 전체 설정 갱신"
 	@echo "make precheck BASE_REF=main   비교 기준 ref 변경"
 
 precheck:
@@ -13,3 +14,6 @@ precheck:
 
 checkall:
 	@$(PYTHON) scripts/precheck.py --base-ref "$(BASE_REF)" --all
+
+update-leetcode:
+	@$(PYTHON) scripts/update_leetcode_problems.py

@@ -18,6 +18,7 @@ from scripts.validate_solution_pr import (
     validate_changes,
 )
 from scripts.solution_parser import parse_solution
+from pages.problem_catalog import CatalogError, load_config
 
 
 def _is_solution_change(change: Change) -> bool:
@@ -58,8 +59,20 @@ def validate_local_solutions(repository_root: Path, changes: list[Change]) -> bo
         print("[SKIP] strict 검사가 필요한 변경 솔루션이 없습니다.", flush=True)
         return True
 
+    config_path = repository_root / "pages" / "config.yaml"
+    try:
+        config_data = load_config(config_path)
+    except (CatalogError, OSError, ValueError) as error:
+        print(f"[FAIL] 문제 설정을 읽을 수 없습니다: {config_path}: {error}", flush=True)
+        return False
+
     reports = [
-        validate_changes(repository_root, [change])
+        validate_changes(
+            repository_root,
+            [change],
+            config_path=config_path,
+            config_data=config_data,
+        )
         for change in solution_changes
     ]
     for report in reports:

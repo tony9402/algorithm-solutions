@@ -368,17 +368,6 @@ def _parse_description(
         )
 
     description = "".join(lines[marker_index + 1 : closing_index]).strip()
-    if not description:
-        severity = "error" if mode == "strict" else "warning"
-        _diagnostic(
-            diagnostics,
-            "SOL007",
-            severity,
-            "Solution Description 내용이 비어 있습니다.",
-            source_path,
-            marker_index + 1,
-        )
-
     return description or None, set(range(marker_index, closing_index + 1))
 
 

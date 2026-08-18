@@ -24,7 +24,7 @@ PR 제목 예시: [ADD] baekjoon 1000 cpp solution
 - [ ] 같은 문제와 언어의 솔루션이 이미 존재하는지 확인했습니다.
 - [ ] `Authored by` 메타데이터를 파일 첫 줄부터 정확한 주석 형식으로 작성했습니다.
 - [ ] `Co-authored by`와 `Link`는 값이 있을 때만 작성했으며, `Link`는 완전한 `http` 또는 `https` URL입니다.
-- [ ] 코드 아래에 비어 있지 않은 `Solution Description`을 언어에 맞는 주석으로 작성했습니다.
+- [ ] 코드 아래에 정상적으로 닫힌 `Solution Description` 블록을 언어에 맞는 주석으로 작성했습니다. 설명 내용은 비워둘 수 있습니다.
 - [ ] 백준 솔루션은 표준 입출력을 사용하고 저장소의 언어별 작성 규칙을 확인했습니다.
 - [ ] LeetCode 또는 HackerRank 문제 링크를 자동으로 결정할 수 없다면 `pages/config.yaml`에 문제 정보를 등록했습니다.
 - [ ] 솔루션 제출과 관계없는 파일은 변경하지 않았습니다.

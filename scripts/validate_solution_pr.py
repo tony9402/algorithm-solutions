@@ -158,6 +158,7 @@ def validate_changes(
     repository_root: Path,
     changes: list[Change],
     config_path: Path | None = None,
+    config_data: dict | None = None,
 ) -> ValidationReport:
     report = ValidationReport()
     solution_changes = [
@@ -214,7 +215,7 @@ def validate_changes(
     report.solution = _normalised_solution(solution)
     resolved_config_path = config_path or repository_root / "pages" / "config.yaml"
     try:
-        config = load_config(resolved_config_path)
+        config = config_data if config_data is not None else load_config(resolved_config_path)
         problem = resolve_problem(
             config,
             solution.platform,
