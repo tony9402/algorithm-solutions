@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ site.description }}">
+    <meta name="color-scheme" content="light">
+    <title>{{ page_title }}</title>
+    <link rel="icon" href="{{ url_for('assets/favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('assets/site.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets/highlight.css') }}">
+    <script defer src="{{ url_for('assets/site.js') }}"></script>
+</head>
+<body data-page="{{ active_nav|default('') }}">
+    <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+    <header class="site-header">
+        <div class="shell header-inner">
+            <a class="brand" href="{{ url_for() }}" aria-label="Algorithm Solutions 홈">
+                <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+                <span>Algorithm Solutions</span>
+            </a>
+            <nav class="header-nav" aria-label="주요 메뉴">
+                <a class="header-nav-link{% if active_nav == 'solutions' %} is-active{% endif %}" href="{{ url_for() }}"{% if active_nav == 'solutions' %} aria-current="page"{% endif %}>솔루션</a>
+                <a
+                    class="header-nav-link notice-nav-link{% if active_nav == 'announcements' %} is-active{% endif %}"
+                    href="{{ url_for('announcements/') }}"
+                    data-announcement-link
+                    data-recent-announcement-ids="{{ recent_announcement_ids|join(',') }}"
+                    {% if active_nav == 'announcements' %}aria-current="page"{% endif %}
+                >
+                    공지사항
+                    <span class="notice-indicator" data-notice-indicator hidden aria-label="읽지 않은 새 공지"></span>
+                </a>
+                <a class="header-link" href="{{ site.repository_url }}" target="_blank" rel="noopener noreferrer">
+                    GitHub
+                    <span aria-hidden="true">↗</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="shell footer-inner">
+            <p>{{ solution_count }}개 솔루션 · {{ problem_count }}개 문제</p>
+            <p>소스가 업데이트되면 GitHub Pages에 자동 반영됩니다.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="shell problem-page">
+    <nav class="breadcrumbs" aria-label="경로">
+        <a href="{{ url_for() }}">전체 문제</a>
+        <span aria-hidden="true">/</span>
+        <span>{{ problem.platform_label }} #{{ problem.problem_id }}</span>
+    </nav>
+
+    <header class="problem-hero">
+        <div>
+            <div class="card-topline">
+                <span class="platform-badge platform-{{ problem.platform }}">{{ problem.platform_label }}</span>
+                <span class="problem-number">#{{ problem.problem_id }}</span>
+            </div>
+            <h1>{{ problem.title }}</h1>
+            <p>{{ problem.solution_count }}개의 풀이 · {{ problem.languages|join(', ') }}</p>
+        </div>
+        <a class="button button-primary" href="{{ problem.external_url }}" target="_blank" rel="noopener noreferrer">문제 원문 보기 ↗</a>
+    </header>
+
+    {% if problem.solutions|length > 1 %}
+    <div class="solution-tabs" role="tablist" aria-label="솔루션 선택">
+        {% for solution in problem.solutions %}
+        <button
+            type="button"
+            role="tab"
+            id="tab-{{ solution.anchor }}"
+            aria-controls="{{ solution.anchor }}"
+            aria-selected="{{ 'true' if loop.first else 'false' }}"
+            tabindex="{{ '0' if loop.first else '-1' }}"
+            data-solution-tab="{{ solution.anchor }}"
+        >
+            <strong>{{ solution.language }}</strong>
+            <span>{{ solution.filename }}</span>
+        </button>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="solution-stack">
+        {% for solution in problem.solutions %}
+        <article
+            id="{{ solution.anchor }}"
+            class="solution-panel"
+            {% if problem.solutions|length > 1 %}
+            role="tabpanel"
+            aria-labelledby="tab-{{ solution.anchor }}"
+            {% else %}
+            role="region"
+            aria-label="{{ solution.language }} 솔루션"
+            {% endif %}
+            {% if not loop.first and problem.solutions|length > 1 %}hidden{% endif %}
+        >
+            <header class="solution-info">
+                <div>
+                    <p class="eyebrow">SOLUTION INFO</p>
+                    <h2>{{ solution.language }} · {{ solution.filename }}</h2>
+                </div>
+                <dl class="metadata-grid">
+                    <div>
+                        <dt>작성자</dt>
+                        <dd>{{ solution.author }}</dd>
+                    </div>
+                    <div>
+                        <dt>공동 작성자</dt>
+                        <dd>{{ solution.coauthors|join(', ') if solution.coauthors else '없음' }}</dd>
+                    </div>
+                    <div>
+                        <dt>링크</dt>
+                        <dd class="metadata-links">
+                            {% if solution.submission_url %}
+                            <a href="{{ solution.submission_url }}" target="_blank" rel="noopener noreferrer">제출 보기 ↗</a>
+                            {% else %}
+                            <span>제출 링크 없음</span>
+                            {% endif %}
+                            <a href="{{ solution.github_url }}" target="_blank" rel="noopener noreferrer">GitHub 원본 ↗</a>
+                        </dd>
+                    </div>
+                </dl>
+            </header>
+
+            <section class="code-section" aria-labelledby="code-title-{{ solution.anchor }}">
+                <div class="code-toolbar">
+                    <div>
+                        <span class="window-dot dot-red"></span>
+                        <span class="window-dot dot-yellow"></span>
+                        <span class="window-dot dot-green"></span>
+                        <span id="code-title-{{ solution.anchor }}" class="code-filename">{{ solution.filename }}</span>
+                    </div>
+                    <button type="button" class="copy-button" data-copy-code>코드 복사</button>
+                </div>
+                <pre class="source-code" tabindex="0"><code class="highlight language-{{ solution.language|lower }}">{{ solution.highlighted_code|safe }}</code></pre>
+            </section>
+
+            <section class="description-card" aria-labelledby="description-title-{{ solution.anchor }}">
+                <p class="eyebrow">SOLUTION DESCRIPTION</p>
+                <h2 id="description-title-{{ solution.anchor }}">풀이 설명</h2>
+                {% if solution.solution_description %}
+                <p class="solution-description">{{ solution.solution_description }}</p>
+                {% else %}
+                <p class="description-empty">등록된 풀이 설명이 없습니다.</p>
+                {% endif %}
+            </section>
+        </article>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

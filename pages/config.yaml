@@ -1,0 +1,50 @@
+site:
+  title: Algorithm Solutions
+  description: 여러 온라인 저지의 알고리즘 풀이를 언어별로 모아보는 정적 사이트
+  repository_url: https://github.com/tony9402/algorithm-solutions
+  default_base_path: /algorithm-solutions
+  catalog_page_size: 30
+
+announcements:
+  directory: announcements
+  recent_days: 7
+  timezone: Asia/Seoul
+
+validation:
+  minimum_solution_count: 549
+  minimum_problem_count: 427
+
+platforms:
+  baekjoon:
+    label: Baekjoon
+    problem_url_template: https://www.acmicpc.net/problem/{problem_id}
+  leetcode:
+    label: LeetCode
+  programmers:
+    label: Programmers
+    problem_url_template: https://school.programmers.co.kr/learn/courses/30/lessons/{problem_id}
+  hackerrank:
+    label: HackerRank
+
+problems:
+  leetcode/9:
+    title: Palindrome Number
+    url: https://leetcode.com/problems/palindrome-number/
+  leetcode/42:
+    title: Trapping Rain Water
+    url: https://leetcode.com/problems/trapping-rain-water/
+  leetcode/977:
+    title: Squares of a Sorted Array
+    url: https://leetcode.com/problems/squares-of-a-sorted-array/
+  leetcode/1609:
+    title: Even Odd Tree
+    url: https://leetcode.com/problems/even-odd-tree/
+  leetcode/2709:
+    title: Greatest Common Divisor Traversal
+    url: https://leetcode.com/problems/greatest-common-divisor-traversal/
+  leetcode/2864:
+    title: Maximum Odd Binary Number
+    url: https://leetcode.com/problems/maximum-odd-binary-number/
+  hackerrank/8137:
+    title: Select All
+    url: https://www.hackerrank.com/challenges/select-all-sql/problem

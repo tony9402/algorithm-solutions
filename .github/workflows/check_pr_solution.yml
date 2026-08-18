@@ -1,161 +1,66 @@
-name: Auto Check Solution
+name: Solution Format
 
 on:
-  pull_request_target:
-    types: [opened, reopened, edited, ready_for_review]
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths:
+      - "solutions/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: solution-format-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
-    create-pull-requst:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-          with:
-            ref: main
-        - name: Setup Python
-          uses: actions/setup-python@v1
-          with:
-            python-version: '3.x'
-            architecture: 'x64'
+  solution-format:
+    name: solution-format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pull request candidate
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          path: candidate
+          persist-credentials: false
 
-        - name: tagging (1. Run script)
-          run: |
-            python scripts/check_pull_request_code.py --pr_number ${{ github.event.number }} --url ${{ secrets.API_SOLUTION_URL }}
+      - name: Checkout trusted validator
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 1
+          path: trusted
+          persist-credentials: false
 
-        - name: add Label
-          uses: actions/github-script@v7
-          with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const { SOLUTION_PR, SOLUTION_PER_PR, METADATA, SOLUTION_PATH, SOLUTION_LANGUAGE, SOLUTION_AUTHOR, SOLUTION_DESCRIPTION, OJ_NAME, OJ_PROBLEM_NUMBER, OJ_URL } = require("./result.json");
-              const languages = [
-                "C", "C++", "Python", "Java", "Kotlin", "Javascript", "Rust", "Swift", "Go", "Sql"
-              ];
-              const oj_names = [
-                "baekjoon", "programmers", "leetcode", "hackerrank"
-              ];
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: trusted/requirements-pages.txt
 
-              var labels = [];
-              github.rest.issues.listLabelsOnIssue({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.issue.number
-              }).then(res => labels = res.data);
+      - name: Install validator dependencies
+        run: python -m pip install -r trusted/requirements-pages.txt
 
-              function Contain(s) {
-                return labels.includes(s);
-              }
+      - name: Validate changed solution
+        run: |
+          python trusted/scripts/validate_solution_pr.py \
+            --repo-root candidate \
+            --base-sha "${{ github.event.pull_request.base.sha }}" \
+            --head-sha "${{ github.sha }}" \
+            --result "$GITHUB_WORKSPACE/validation-result.json" \
+            --comment "$GITHUB_WORKSPACE/validation-comment.md" \
+            --pr-number "${{ github.event.pull_request.number }}" \
+            --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-              var comment_flag = false;
-              var comment = "";
-              function addComment(text) {
-                comment_flag = true;
-                if(text.length > 0) {
-                  comment = `${comment}\n${text}`
-                }
-                else {
-                  comment = text
-                }
-              }
-
-              if(SOLUTION_PR === "True") {
-                if (!Contain("solution")) {
-                  github.rest.issues.addLabels({
-                    issue_number: context.issue.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    labels: ["solution"]
-                  });
-                }
-                
-                if(SOLUTION_PER_PR !== "True" || SOLUTION_PATH !== "True") {
-                  if(SOLUTION_PER_PR !== "True") {
-                    addComment("하나의 PR에는 하나의 솔루션을 업로드해야합니다.");
-                  }
-                  if(SOLUTION_PATH !== "True") {
-                    addComment("솔루션 경로가 올바른지 확인해주세요.");
-                  }
-                  if (!Contain("Wrong PR")) {
-                    github.rest.issues.addLabels({
-                      issue_number: context.issue.number,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      labels: ["Wrong PR"]
-                    });
-                  }
-                }
-                else {
-                  if (Contain("Wrong PR")) {
-                    github.rest.issues.removeLabel({
-                      issue_number: context.issue.number,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      labels: ["Wrong PR"]
-                    });
-                  }
-                }
-
-                for(const lang of languages) {
-                  if(lang === SOLUTION_LANGUAGE) continue;
-                  if (Contain(lang)) {
-                    github.rest.issues.removeLabel({
-                      issue_number: context.issue.number,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      labels: [lang]
-                    });
-                  }
-                }
-                if(SOLUTION_LANGUAGE !== "404") {
-                  github.rest.issues.addLabels({
-                    issue_number: context.issue.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    labels: [SOLUTION_LANGUAGE]
-                  });
-                }
-
-                for(const oj_name of oj_names) {
-                  if(oj_name === OJ_NAME) continue;
-                  if (Contain(oj_name)) {
-                    github.rest.issues.removeLabel({
-                      issue_number: context.issue.number,
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      labels: [oj_name]
-                    });
-                  }
-                }
-
-                if(OJ_NAME !== "") {
-                  github.rest.issues.addLabels({
-                    issue_number: context.issue.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    labels: [OJ_NAME]
-                  }); 
-                }
-
-                if(SOLUTION_PER_PR === "True" && SOLUTION_PATH === "True") {
-                  if(METADATA === "True") {
-                    if(!Contain("solution")) {
-                      addComment(`솔루션을 올려주셔서 감사합니다.\n아래 정보가 맞는지 확인해주세요.\n\n문제 링크: ${OJ_URL}\n\n\`\`\`\n작성자: ${SOLUTION_AUTHOR}\n언어: ${SOLUTION_LANGUAGE}\n사이트: ${OJ_NAME}\n풀이 설명: ${SOLUTION_DESCRIPTION}\n\`\`\``);
-                    }
-                    else {
-                      addComment(`변경 사항\n아래 정보가 맞는지 확인해주세요.\n\n문제 링크: ${OJ_URL}\n\n\`\`\`\n작성자: ${SOLUTION_AUTHOR}\n언어: ${SOLUTION_LANGUAGE}\n사이트: ${OJ_NAME}\n풀이 설명: ${SOLUTION_DESCRIPTION}\n\`\`\``);
-                    }
-                  }
-                  else {
-                    addComment(`솔루션을 올려주셔서 감사합니다.\n\n문제 링크: ${OJ_URL}\n\n솔루션 파일 맨 위에 적는 정보를 제대로 적었는지 다시 확인해주세요.`);
-                  }
-                }
-
-                if(comment_flag) {
-                  github.rest.issues.createComment({
-                    issue_number: context.issue.number,
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    body: comment,
-                  })
-                }
-              }
+      - name: Upload validation result for PR comment
+        if: always() && hashFiles('validation-result.json') != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: solution-format-result
+          path: |
+            validation-result.json
+            validation-comment.md
+          if-no-files-found: error
+          retention-days: 7

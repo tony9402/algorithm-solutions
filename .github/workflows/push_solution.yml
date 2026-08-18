@@ -5,7 +5,10 @@ on:
     branches: [ main ]
     paths:
       - 'solutions/**'
-      - 'scripts/**'
+      - 'scripts/push_solution.py'
+      - 'scripts/utils.py'
+      - 'scripts/solution_parser.py'
+      - 'requirements.txt'
 
 jobs:
   build:

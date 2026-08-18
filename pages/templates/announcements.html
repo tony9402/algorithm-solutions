@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="announcement-page shell" aria-labelledby="announcement-heading">
+    <div class="announcement-hero">
+        <p class="eyebrow">NOTICE BOARD</p>
+        <h1 id="announcement-heading">공지사항</h1>
+        <p>저장소와 솔루션 사이트의 변경사항을 한곳에서 확인하세요.</p>
+    </div>
+
+    {% if announcements %}
+    <div class="announcement-list">
+        {% for announcement in announcements %}
+        <article id="notice-{{ announcement.announcement_id }}" class="announcement-card">
+            <header>
+                <div>
+                    {% if announcement.is_recent %}<span class="new-badge">NEW</span>{% endif %}
+                    <h2>{{ announcement.title }}</h2>
+                </div>
+                <time datetime="{{ announcement.published_at.isoformat() }}">{{ announcement.published_label }}</time>
+            </header>
+            <div class="announcement-body">{{ announcement.body_html|safe }}</div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state announcement-empty">
+        <p>등록된 공지사항이 없습니다.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

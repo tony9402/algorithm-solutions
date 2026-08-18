@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/vim,visualstudiocode,python,java,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=vim,visualstudiocode,python,java,dotenv
 
+### docs ###
+docs/
+
 ### vscode ###
 .vscode/
 
@@ -198,6 +201,11 @@ cython_debug/
 poetry.toml
 
 # ruff
+
+# GitHub Pages build and validation artifacts
+/_site/
+/validation-result.json
+/validation-comment.md
 .ruff_cache/
 
 # LSP config files

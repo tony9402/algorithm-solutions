@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div class="shell hero-inner">
+        <p class="eyebrow">READ · COMPARE · LEARN</p>
+        <h1>한곳에서 살펴보는<br><span>알고리즘 솔루션</span></h1>
+        <p class="hero-copy">온라인 저지의 문제를 번호, 제목, 플랫폼과 언어로 찾아보고, 풀이 코드와 설명을 나란히 확인하세요.</p>
+        <dl class="stats" aria-label="저장소 통계">
+            <div>
+                <dt>문제</dt>
+                <dd>{{ problem_count }}</dd>
+            </div>
+            <div>
+                <dt>솔루션</dt>
+                <dd>{{ solution_count }}</dd>
+            </div>
+            <div>
+                <dt>언어</dt>
+                <dd>{{ language_options|length }}</dd>
+            </div>
+        </dl>
+    </div>
+</section>
+
+<section class="catalog-section shell" aria-labelledby="catalog-heading">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">SOLUTION CATALOG</p>
+            <h2 id="catalog-heading">문제 찾아보기</h2>
+        </div>
+        <p id="result-count" class="result-count" aria-live="polite">{{ problem_count }}개 문제</p>
+    </div>
+
+    <form class="filters" id="solution-filters" role="search" data-page-size="{{ page_size }}">
+        <label class="search-field">
+            <span class="visually-hidden">문제 검색</span>
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="query-filter" type="search" placeholder="문제 번호 또는 제목 검색" autocomplete="off">
+        </label>
+        <label>
+            <span class="visually-hidden">플랫폼 필터</span>
+            <select id="platform-filter">
+                <option value="">모든 플랫폼</option>
+                {% for option in platform_options %}
+                <option value="{{ option.value }}">{{ option.label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            <span class="visually-hidden">언어 필터</span>
+            <select id="language-filter">
+                <option value="">모든 언어</option>
+                {% for language in language_options %}
+                <option value="{{ language|lower }}">{{ language }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <button class="button button-muted" type="reset">초기화</button>
+    </form>
+
+    <div class="problem-grid" id="problem-grid">
+        {% for problem in problems %}
+        <article
+            class="problem-card"
+            data-problem-card
+            data-search="{{ problem.search_text }}"
+            data-platform="{{ problem.platform }}"
+            data-languages="{{ problem.languages|join('|')|lower }}"
+            {% if loop.index > page_size %}hidden{% endif %}
+        >
+            <div class="card-topline">
+                <span class="platform-badge platform-{{ problem.platform }}">{{ problem.platform_label }}</span>
+                <span class="problem-number">#{{ problem.problem_id }}</span>
+            </div>
+            <h3><a href="{{ url_for(problem.internal_path) }}">{{ problem.title }}</a></h3>
+            <div class="language-list" aria-label="사용 언어">
+                {% for language in problem.languages %}
+                <span>{{ language }}</span>
+                {% endfor %}
+            </div>
+            <div class="card-footer">
+                <span>{{ problem.solution_count }}개 풀이</span>
+                <a href="{{ problem.external_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ problem.title }} 문제 원문 보기">문제 보기 ↗</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    <div id="empty-state" class="empty-state" hidden>
+        <p>조건에 맞는 문제가 없습니다.</p>
+        <button class="button button-primary" type="button" data-reset-filters>필터 초기화</button>
+    </div>
+    <nav id="catalog-pagination" class="pagination" aria-label="문제 목록 페이지" hidden></nav>
+</section>
+{% endblock %}

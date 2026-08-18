@@ -6,6 +6,14 @@
 
 집단 지성 프로젝트를 [백준 문제집](https://github.com/tony9402/baekjoon)에서 진행하였지만 확장을 위해 솔루션만 따로 빼서 새로운 레포지토리로 이전을 하였습니다.
 
+## 🌐 솔루션 사이트
+
+`main` 브랜치의 솔루션은 정적 사이트로 생성되어 GitHub Pages에 자동 배포됩니다.
+
+- 사이트: [Algorithm Solutions](https://tony9402.github.io/algorithm-solutions/)
+- 문제 번호와 제목을 검색하고 플랫폼·언어로 필터링할 수 있으며, 결과는 30개씩 표시됩니다.
+- 작성자·공동 작성자·제출 링크와 풀이 설명은 코드에서 분리해서 보여줍니다.
+- 저장소의 `announcements/*.md`에 올린 공지는 사이트의 공지사항 탭에서 모아볼 수 있습니다.
 
 
 # 📕 문제 풀이 컨트리뷰트 가이드라인
@@ -79,7 +87,7 @@ Pull Request에 대한 설명은 [여기](https://wayhome25.github.io/git/2017/0
 
 - Rule 0 : (백준 문제 한정) **(모든 언어 공통)표준입출력으로 풀어야 합니다.**
 - Rule 1 : 다른 사람의 솔루션을 자신이 푼 것처럼 Pull Request (PR) 하시면 **절대❗️** 안됩니다.
-- Rule 2 : 아래와 같이 솔루션 맨 위에 정보를 **반드시** 넣어주세요. (Authored By에는 각 플랫폼 닉네임으로 넣어야 합니다.)
+- Rule 2 : 아래 형식으로 솔루션 맨 위에 정보를 넣어주세요. `Authored by`는 **필수**이며 각 플랫폼 닉네임을 사용해야 합니다. `Co-authored by`와 제출 결과 `Link`는 없으면 줄 자체를 생략할 수 있습니다. 값을 적을 때는 주석, 키, 콜론의 공백을 예시와 동일하게 작성해주세요.
 
 #### 백준
 [해당 PR](https://github.com/tony9402/algorithm-solutions/pull/12)을 확인해주세요.
@@ -98,7 +106,7 @@ Pull Request에 대한 설명은 [여기](https://wayhome25.github.io/git/2017/0
 ```
 
 #### 프로그래머스
-**Link는 빈칸으로 생략합니다.**  
+**제출 링크가 없으면 Link 줄을 생략할 수 있습니다.**
 [해당 PR](https://github.com/tony9402/algorithm-solutions/pull/17)을 확인해주세요.
 ```cpp
 // Authored by : tony9402
@@ -107,7 +115,7 @@ Pull Request에 대한 설명은 [여기](https://wayhome25.github.io/git/2017/0
 ```
 
 #### 해커랭크
-**Link는 빈칸으로 생략합니다.**  
+**제출 링크가 없으면 Link 줄을 생략할 수 있습니다.**
 [해당 PR](https://github.com/tony9402/algorithm-solutions/pull/19)을 확인해주세요.
 ```cpp
 // Authored by : tony9402
@@ -133,6 +141,20 @@ Python인 경우
 
 각 언어의 주석에 맞게 변경해주시면 됩니다.
 ```
+
+### Pull Request 자동 형식 검사
+
+솔루션 PR은 `solution-format` 검사에서 다음 항목을 자동으로 확인합니다.
+
+- PR에서 추가하거나 수정한 솔루션 파일이 1개인지 확인합니다. 해당 문제의 `pages/config.yaml`, 테스트, 문서 변경은 함께 올릴 수 있습니다.
+- `solutions/{플랫폼}/{문제 번호}/{파일명}` 경로와 허용 언어/파일명을 검사합니다.
+- `Authored by`가 파일 첫 줄부터 표준 주석 형식으로 작성되었는지 검사합니다.
+- 선택적인 공동 작성자와 제출 링크가 올바른 형식인지 검사합니다.
+- 신규·수정 솔루션에는 비어 있지 않고 정상적으로 닫힌 `Solution Description`이 있어야 합니다.
+- 메타데이터와 설명을 제외한 실제 코드가 있어야 합니다.
+- LeetCode/HackerRank처럼 문제 번호만으로 URL을 만들 수 없으면 `pages/config.yaml`에 문제 링크를 등록해야 합니다.
+
+검사가 끝나면 성공·실패와 관계없이 파일, 문제, 오류·경고 상세 결과를 PR 댓글로 남깁니다. PR에 새 커밋을 push하면 검사를 다시 수행하고 기존 봇 댓글 하나를 최신 결과로 갱신합니다. 오류가 있으면 Actions 화면과 PR check에도 파일명, 줄 번호, 오류 코드가 표시되며 병합할 수 없습니다.
 
 - Rule 6 : 1 Tab == 4 space, 즉 들여쓰기는 반드시 공백문자 4개로 해야합니다.  
 
