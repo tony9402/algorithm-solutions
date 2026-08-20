@@ -79,6 +79,37 @@ class DiscussionDataTest(unittest.TestCase):
         self.assertIsNone(parse_rating(without_marker))
         self.assertIsNone(parse_rating(invalid_problem))
 
+    def test_rating_without_recommendation_still_counts_difficulty(self) -> None:
+        result = aggregate_ratings(
+            [
+                _rating(
+                    1,
+                    "octocat",
+                    "baekjoon/1000",
+                    "Gold III",
+                    "선택 안 함",
+                    "2026-08-20T00:00:00Z",
+                )
+            ]
+        )["baekjoon/1000"]
+
+        self.assertEqual(result["difficulty"]["vote_count"], 1)
+        self.assertIsNone(result["votes"][0]["recommendation"])
+        self.assertNotIn("recommendation", result)
+
+    def test_recommendation_percentage_uses_only_recommendation_votes(self) -> None:
+        result = aggregate_ratings(
+            [
+                _rating(1, "octocat", "baekjoon/1000", "Gold III", "추천", "2026-08-20T00:00:00Z"),
+                _rating(2, "hubot", "baekjoon/1000", "Gold III", "선택 안 함", "2026-08-20T01:00:00Z"),
+            ]
+        )["baekjoon/1000"]
+
+        self.assertEqual(result["difficulty"]["vote_count"], 2)
+        self.assertEqual(result["recommendation"]["recommended"], 1)
+        self.assertEqual(result["recommendation"]["not_recommended"], 0)
+        self.assertEqual(result["recommendation"]["recommended_percent"], 100)
+
     def test_latest_vote_per_github_user_wins(self) -> None:
         result = aggregate_ratings(
             [

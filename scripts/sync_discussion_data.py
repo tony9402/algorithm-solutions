@@ -203,14 +203,14 @@ def parse_rating(discussion: dict[str, Any]) -> dict[str, Any] | None:
 
     problem_key = (_form_field(body, "문제 식별자") or "").casefold()
     difficulty = _form_field(body, "체감 난이도") or ""
-    recommendation = _form_field(body, "추천 여부") or ""
+    recommendation = _form_field(body, "추천 여부") or "선택 안 함"
     author = discussion.get("author")
     login = str(author.get("login", "")).strip() if isinstance(author, dict) else ""
     if not PROBLEM_KEY_PATTERN.fullmatch(problem_key):
         return None
     if difficulty not in TIER_VALUES:
         return None
-    if recommendation not in {"추천", "비추천"}:
+    if recommendation not in {"추천", "비추천", "선택 안 함"}:
         return None
     if not login:
         return None
@@ -220,7 +220,11 @@ def parse_rating(discussion: dict[str, Any]) -> dict[str, Any] | None:
         "author": login,
         "difficulty": difficulty,
         "difficulty_value": TIER_VALUES[difficulty],
-        "recommendation": "up" if recommendation == "추천" else "down",
+        "recommendation": (
+            "up" if recommendation == "추천"
+            else "down" if recommendation == "비추천"
+            else None
+        ),
         "discussion_number": int(discussion.get("number", 0)),
         "discussion_url": str(discussion.get("url", "")),
         "created_at": str(discussion.get("createdAt", "")),
@@ -281,8 +285,11 @@ def aggregate_ratings(
             for tier_name in TIER_NAMES
         }
         distribution = {name: count for name, count in distribution.items() if count}
-        recommended = sum(item["recommendation"] == "up" for item in votes)
-        not_recommended = vote_count - recommended
+        recommendation_votes = [
+            item for item in votes if item["recommendation"] in {"up", "down"}
+        ]
+        recommended = sum(item["recommendation"] == "up" for item in recommendation_votes)
+        not_recommended = len(recommendation_votes) - recommended
         aggregates[problem_key] = {
             "difficulty": {
                 "vote_count": vote_count,
@@ -294,14 +301,15 @@ def aggregate_ratings(
                 },
                 "distribution": distribution,
             },
-            "recommendation": {
+            "votes": votes,
+        }
+        if recommendation_votes:
+            aggregates[problem_key]["recommendation"] = {
                 "recommended": recommended,
                 "not_recommended": not_recommended,
                 "score": recommended - not_recommended,
-                "recommended_percent": round(recommended * 100 / vote_count),
-            },
-            "votes": votes,
-        }
+                "recommended_percent": round(recommended * 100 / len(recommendation_votes)),
+            }
     return aggregates
 
 

@@ -37,6 +37,15 @@ export const tierName = (value) => {
 };
 
 
+const normaliseProblem = (value) => {
+    const problem = String(value || "").trim().toLowerCase();
+    if (!PROBLEM_PATTERN.test(problem)) {
+        throw new HttpError(400, "문제 식별자가 올바르지 않습니다.");
+    }
+    return problem;
+};
+
+
 export const parseAllowedOrigins = (value) => new Set(
     String(value || "")
         .split(",")
@@ -64,22 +73,23 @@ export const validateReturnUrl = (value, allowedOrigins) => {
 
 
 export const validateVote = (payload) => {
-    const problem = String(payload?.problem || "").trim().toLowerCase();
+    const problem = normaliseProblem(payload?.problem);
     const difficulty = Number(payload?.difficulty);
-    const recommendation = String(payload?.recommendation || "");
-    if (!PROBLEM_PATTERN.test(problem)) {
-        throw new HttpError(400, "문제 식별자가 올바르지 않습니다.");
-    }
+    const recommendation = payload?.recommendation == null
+        ? null
+        : String(payload.recommendation).trim() || null;
     const difficultyName = tierName(difficulty);
-    if (!new Set(["up", "down"]).has(recommendation)) {
-        throw new HttpError(400, "추천 또는 비추천을 선택해 주세요.");
+    if (recommendation !== null && !new Set(["up", "down"]).has(recommendation)) {
+        throw new HttpError(400, "추천 여부 값이 올바르지 않습니다.");
     }
     return {problem, difficulty, difficultyName, recommendation};
 };
 
 
 export const buildDiscussionBody = (vote, siteUrl) => {
-    const recommendationLabel = vote.recommendation === "up" ? "추천" : "비추천";
+    const recommendationLabel = vote.recommendation === "up"
+        ? "추천"
+        : vote.recommendation === "down" ? "비추천" : "선택 안 함";
     const problemUrl = `${String(siteUrl || "").replace(/\/$/, "")}/problems/${vote.problem}/`;
     return `<!-- algorithm-solutions-rating:v1 -->
 
@@ -428,8 +438,12 @@ const missingDiscussionError = (error) => error instanceof GitHubApiError && err
 const saveVote = async (session, vote, env) => {
     const mappingKey = `vote:${session.user.id}:${vote.problem}`;
     const existing = await env.COMMUNITY_KV.get(mappingKey, "json");
+    const savedVote = {
+        ...vote,
+        recommendation: vote.recommendation ?? existing?.vote?.recommendation ?? null,
+    };
     const title = `[평가] ${vote.problem}`;
-    const body = buildDiscussionBody(vote, env.SITE_URL);
+    const body = buildDiscussionBody(savedVote, env.SITE_URL);
     let discussion;
     let created = false;
 
@@ -457,9 +471,14 @@ const saveVote = async (session, vote, env) => {
             discussionId: discussion.id,
             discussionNumber: discussion.number,
             discussionUrl: discussion.url,
+            vote: {
+                difficulty: savedVote.difficulty,
+                difficultyName: savedVote.difficultyName,
+                recommendation: savedVote.recommendation,
+            },
         }),
     );
-    return {discussion, created};
+    return {discussion, created, vote: savedVote};
 };
 
 
@@ -483,10 +502,10 @@ const handleVote = async (request, env) => {
         created: result.created,
         user: session.user,
         vote: {
-            problem: vote.problem,
-            difficulty: vote.difficulty,
-            difficultyName: vote.difficultyName,
-            recommendation: vote.recommendation,
+            problem: result.vote.problem,
+            difficulty: result.vote.difficulty,
+            difficultyName: result.vote.difficultyName,
+            recommendation: result.vote.recommendation,
         },
         discussionUrl: result.discussion.url,
         message: "평가가 GitHub Discussion에 저장되었습니다.",
@@ -512,6 +531,12 @@ const route = async (request, env) => {
     if (request.method === "GET" && url.pathname === "/session") {
         const session = await requireSession(request, env);
         return jsonResponse(request, env, {authenticated: true, user: session.user});
+    }
+    if (request.method === "GET" && url.pathname === "/vote") {
+        const session = await requireSession(request, env);
+        const problem = normaliseProblem(url.searchParams.get("problem"));
+        const existing = await env.COMMUNITY_KV.get(`vote:${session.user.id}:${problem}`, "json");
+        return jsonResponse(request, env, {vote: existing?.vote || null});
     }
     if (request.method === "POST" && url.pathname === "/logout") {
         const sessionId = bearerToken(request);

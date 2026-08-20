@@ -1,6 +1,6 @@
 # 웹 평가 API
 
-문제 페이지의 GitHub 로그인과 평가 저장을 담당하는 Cloudflare Worker입니다. 사용자는 문제 페이지 안에서 난이도와 추천 여부를 제출하며, Worker가 사용자의 GitHub App 토큰으로 GitHub Discussion을 생성하거나 갱신합니다. OAuth secret과 GitHub 토큰은 정적 GitHub Pages에 노출되지 않습니다.
+문제 페이지의 GitHub 로그인과 평가 저장을 담당하는 Cloudflare Worker입니다. 사용자는 문제 페이지 안에서 난이도를 제출하고 추천 여부는 선택적으로 남기며, Worker가 사용자의 GitHub App 토큰으로 GitHub Discussion을 생성하거나 갱신합니다. 같은 문제를 다시 평가하면 기존 값을 불러와 수정할 수 있습니다. OAuth secret과 GitHub 토큰은 정적 GitHub Pages에 노출되지 않습니다.
 
 Cloudflare의 [Workers Free 요금제](https://developers.cloudflare.com/workers/platform/pricing/)에는 Worker와 제한된 Workers KV 사용량이 포함됩니다. 소규모 커뮤니티는 무료 한도에서 시작할 수 있으며, 운영 전에는 최신 요청·KV 한도를 확인하세요.
 
@@ -11,6 +11,8 @@ Cloudflare의 [Workers Free 요금제](https://developers.cloudflare.com/workers
 1. GitHub 저장소의 `Settings > General > Features`에서 Discussions를 활성화합니다.
 2. `Announcements`와 `General` Discussion 카테고리를 유지합니다.
 3. [giscus GitHub App](https://github.com/apps/giscus)을 이 저장소에 설치합니다.
+
+댓글 입력창을 활성화하려면 위 준비 후 `Sync GitHub Discussions` workflow를 수동으로 한 번 실행합니다. 성공한 workflow가 `community-data/discussions.json`에 저장소와 `Announcements` 카테고리 ID를 기록하고 push하면, 동기화 완료 이벤트를 받은 `GitHub Pages` workflow가 다시 실행됩니다. 배포 결과에서 `Discussion 연동 준비 중` 안내 대신 giscus 댓글 입력창이 표시되는지 확인합니다.
 
 ### 2. Worker URL 만들기
 

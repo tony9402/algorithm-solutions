@@ -203,6 +203,8 @@ class PagesBuildTest(unittest.TestCase):
         )
 
         self.assertIn('src="https://giscus.app/client.js"', rendered)
+        self.assertNotIn('name="recommendation" value="up" required', rendered)
+        self.assertNotIn('name="recommendation" value="down" required', rendered)
         self.assertIn('data-repo-id="R_repo"', rendered)
         self.assertIn('data-category-id="DIC_comments"', rendered)
         self.assertIn('data-term="problem:baekjoon/1000"', rendered)

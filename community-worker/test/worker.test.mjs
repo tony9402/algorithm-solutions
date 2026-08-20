@@ -62,6 +62,15 @@ test("웹 평가 payload를 검증한다", () => {
             recommendation: "up",
         },
     );
+    assert.deepEqual(
+        validateVote({problem: "baekjoon/1000", difficulty: 13}),
+        {
+            problem: "baekjoon/1000",
+            difficulty: 13,
+            difficultyName: "Gold III",
+            recommendation: null,
+        },
+    );
     assert.throws(() => validateVote({problem: "../secret", difficulty: 13, recommendation: "up"}));
     assert.throws(() => validateVote({problem: "baekjoon/1000", difficulty: 0, recommendation: "up"}));
     assert.throws(() => validateVote({problem: "baekjoon/1000", difficulty: 13, recommendation: "maybe"}));
@@ -87,6 +96,12 @@ test("Discussion 집계기가 읽을 수 있는 본문을 만든다", () => {
     assert.match(body, /### 문제 식별자\n\nbaekjoon\/1000/);
     assert.match(body, /### 체감 난이도\n\nGold III/);
     assert.match(body, /### 추천 여부\n\n비추천/);
+
+    const optionalBody = buildDiscussionBody(
+        validateVote({problem: "baekjoon/1000", difficulty: 13}),
+        "https://example.github.io/repo",
+    );
+    assert.match(optionalBody, /### 추천 여부\n\n선택 안 함/);
 });
 
 
@@ -143,8 +158,9 @@ test("웹 평가를 로그인 사용자 명의의 Discussion으로 저장한다"
     const originalFetch = globalThis.fetch;
     const calls = [];
     globalThis.fetch = async (_url, options) => {
-        calls.push(JSON.parse(options.body));
-        if (calls.length === 1) {
+        const request = JSON.parse(options.body);
+        calls.push(request);
+        if (request.query.includes("query RepositoryMetadata")) {
             return Response.json({
                 data: {
                     repository: {
@@ -154,9 +170,12 @@ test("웹 평가를 로그인 사용자 명의의 Discussion으로 저장한다"
                 },
             });
         }
+        const field = request.query.includes("mutation UpdateRating")
+            ? "updateDiscussion"
+            : "createDiscussion";
         return Response.json({
             data: {
-                createDiscussion: {
+                [field]: {
                     discussion: {
                         id: "D_discussion",
                         number: 42,
@@ -179,7 +198,6 @@ test("웹 평가를 로그인 사용자 명의의 Discussion으로 저장한다"
                 body: JSON.stringify({
                     problem: "baekjoon/1000",
                     difficulty: 13,
-                    recommendation: "up",
                 }),
             }),
             workerEnv(kv),
@@ -189,10 +207,47 @@ test("웹 평가를 로그인 사용자 명의의 Discussion으로 저장한다"
         assert.equal(response.status, 200);
         assert.equal(payload.user.login, "octocat");
         assert.equal(payload.vote.difficultyName, "Gold III");
-        assert.equal(payload.vote.recommendation, "up");
+        assert.equal(payload.vote.recommendation, null);
         assert.match(calls[1].variables.input.body, /baekjoon\/1000/);
         assert.match(calls[1].variables.input.body, /Gold III/);
+        assert.match(calls[1].variables.input.body, /선택 안 함/);
         assert.ok(kv.values.has("vote:1:baekjoon/1000"));
+
+        const savedResponse = await worker.fetch(
+            new Request("https://community.example.workers.dev/vote?problem=baekjoon%2F1000", {
+                headers: {Authorization: "Bearer web-session"},
+            }),
+            workerEnv(kv),
+        );
+        const savedPayload = await savedResponse.json();
+        assert.equal(savedResponse.status, 200);
+        assert.equal(savedPayload.vote.difficulty, 13);
+        assert.equal(savedPayload.vote.recommendation, null);
+
+        await kv.delete("rate:web-session");
+        const updateResponse = await worker.fetch(
+            new Request("https://community.example.workers.dev/vote", {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer web-session",
+                    "Content-Type": "application/json",
+                    Origin: "https://example.github.io",
+                },
+                body: JSON.stringify({
+                    problem: "baekjoon/1000",
+                    difficulty: 14,
+                    recommendation: "up",
+                }),
+            }),
+            workerEnv(kv),
+        );
+        const updatePayload = await updateResponse.json();
+        assert.equal(updateResponse.status, 200);
+        assert.equal(updatePayload.created, false);
+        assert.equal(updatePayload.vote.difficultyName, "Gold II");
+        assert.equal(updatePayload.vote.recommendation, "up");
+        assert.match(calls[2].variables.input.body, /Gold II/);
+        assert.match(calls[2].variables.input.body, /추천/);
     } finally {
         globalThis.fetch = originalFetch;
     }
