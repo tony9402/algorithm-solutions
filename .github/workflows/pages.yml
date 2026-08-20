@@ -29,6 +29,9 @@ on:
       - "tests/**"
       - ".github/workflows/pages.yml"
       - ".github/workflows/sync_discussions.yml"
+  workflow_run:
+    workflows: ["Sync GitHub Discussions"]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
@@ -41,6 +44,7 @@ concurrency:
 jobs:
   build:
     name: pages-build
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

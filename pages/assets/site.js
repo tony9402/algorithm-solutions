@@ -187,6 +187,8 @@
         const fields = votePanel.querySelector("[data-community-vote-fields]");
         const status = votePanel.querySelector("[data-community-vote-status]");
         const submitButton = form.querySelector("[type='submit']");
+        const difficultySelect = form.elements.namedItem("difficulty");
+        const recommendationInputs = [...form.querySelectorAll("[name='recommendation']")];
         const sessionKey = "algorithm-solutions-community-session-v1";
         let sessionToken = sessionStorage.getItem(sessionKey) || "";
         let oauthError = "";
@@ -257,6 +259,7 @@
             event.preventDefault();
             if (!sessionToken || !form.reportValidity()) return;
             const formData = new FormData(form);
+            const recommendation = formData.get("recommendation") || null;
             submitButton.disabled = true;
             const original = submitButton.textContent;
             submitButton.textContent = "저장 중…";
@@ -268,11 +271,14 @@
                     body: JSON.stringify({
                         problem,
                         difficulty: Number(formData.get("difficulty")),
-                        recommendation: formData.get("recommendation"),
+                        recommendation,
                     }),
                 });
+                const recommendationMessage = result.vote.recommendation
+                    ? ` · ${result.vote.recommendation === "up" ? "추천" : "비추천"}`
+                    : "";
                 setStatus(
-                    `${result.vote.difficultyName} · ${result.vote.recommendation === "up" ? "추천" : "비추천"}으로 저장했습니다. 집계는 다음 동기화 때 반영됩니다.`,
+                    `${result.vote.difficultyName}${recommendationMessage}으로 저장했습니다. 집계는 다음 동기화 때 반영됩니다.`,
                     "success",
                 );
             } catch (error) {
@@ -301,7 +307,16 @@
             try {
                 const session = await apiRequest("/session");
                 setUser(session.user);
-                setStatus(`${session.user.login} 계정으로 로그인했습니다.`);
+                const saved = await apiRequest(`/vote?problem=${encodeURIComponent(problem)}`);
+                if (saved.vote) {
+                    difficultySelect.value = String(saved.vote.difficulty);
+                    recommendationInputs.forEach((input) => {
+                        input.checked = input.value === saved.vote.recommendation;
+                    });
+                    setStatus(`${session.user.login} 계정의 기존 평가를 불러왔습니다. 수정 후 다시 제출할 수 있습니다.`);
+                } else {
+                    setStatus(`${session.user.login} 계정으로 로그인했습니다.`);
+                }
             } catch (error) {
                 sessionToken = "";
                 sessionStorage.removeItem(sessionKey);
