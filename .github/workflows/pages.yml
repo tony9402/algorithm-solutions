@@ -5,22 +5,30 @@ on:
     branches: [main]
     paths:
       - "announcements/**"
+      - "community-data/**"
+      - "community-worker/**"
       - "solutions/**"
       - "pages/**"
       - "scripts/solution_parser.py"
+      - "scripts/sync_discussion_data.py"
       - "requirements-pages.txt"
       - "tests/**"
       - ".github/workflows/pages.yml"
+      - ".github/workflows/sync_discussions.yml"
   pull_request:
     paths:
       - "announcements/**"
+      - "community-data/**"
+      - "community-worker/**"
       - "solutions/**"
       - "pages/**"
       - "scripts/solution_parser.py"
+      - "scripts/sync_discussion_data.py"
       - "scripts/validate_solution_pr.py"
       - "requirements-pages.txt"
       - "tests/**"
       - ".github/workflows/pages.yml"
+      - ".github/workflows/sync_discussions.yml"
   workflow_dispatch:
 
 permissions:
@@ -53,8 +61,13 @@ jobs:
       - name: Run tests
         run: python -m unittest discover -s tests -v
 
+      - name: Test community Worker
+        run: node --test community-worker/test/worker.test.mjs
+
       - name: Build static site
         run: python pages/build.py
+        env:
+          COMMUNITY_VOTE_API_URL: ${{ vars.COMMUNITY_VOTE_API_URL }}
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'

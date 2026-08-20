@@ -106,5 +106,187 @@
         </article>
         {% endfor %}
     </div>
+
+    {% set difficulty = community.get('difficulty') %}
+    {% set recommendation = community.get('recommendation') %}
+    {% set comments = community.get('comments', {}) %}
+    <section id="community" class="community-section" aria-labelledby="community-title">
+        <header class="community-heading">
+            <div>
+                <p class="eyebrow">GITHUB COMMUNITY</p>
+                <h2 id="community-title">커뮤니티 평가</h2>
+                <p>GitHub 계정으로 남긴 최신 평가 1건만 반영하며, 데이터는 매일 저장소에 동기화됩니다.</p>
+            </div>
+            {% if community_generated_at %}
+            <p class="community-updated">
+                최근 동기화
+                <time datetime="{{ community_generated_at }}">{{ community_generated_at }}</time>
+            </p>
+            {% endif %}
+        </header>
+
+        <div class="community-summary-grid">
+            <article class="community-summary-card difficulty-summary">
+                <p class="community-card-label">체감 난이도</p>
+                {% if difficulty %}
+                <strong class="tier-badge tier-{{ difficulty.representative.group }}">
+                    {{ difficulty.representative.name }}
+                </strong>
+                <p>평균 {{ difficulty.mean_value }} · {{ difficulty.vote_count }}명 참여</p>
+                {% if difficulty.distribution %}
+                <details class="vote-distribution">
+                    <summary>투표 분포 보기</summary>
+                    <ul>
+                        {% for tier_name, count in difficulty.distribution.items() %}
+                        <li><span>{{ tier_name }}</span><strong>{{ count }}</strong></li>
+                        {% endfor %}
+                    </ul>
+                </details>
+                {% endif %}
+                {% else %}
+                <strong class="community-empty-value">아직 평가 없음</strong>
+                <p>첫 난이도 평가를 남겨주세요.</p>
+                {% endif %}
+            </article>
+
+            <article class="community-summary-card recommendation-summary">
+                <p class="community-card-label">문제 추천</p>
+                {% if recommendation %}
+                <div class="recommendation-counts">
+                    <span><strong>👍 {{ recommendation.recommended }}</strong> 추천</span>
+                    <span><strong>👎 {{ recommendation.not_recommended }}</strong> 비추천</span>
+                </div>
+                <div
+                    class="recommendation-meter"
+                    style="--recommend-percent: {{ recommendation.recommended_percent }}%"
+                    role="img"
+                    aria-label="추천 {{ recommendation.recommended_percent }}퍼센트"
+                ><span></span></div>
+                <p>참여자 중 {{ recommendation.recommended_percent }}%가 추천했습니다.</p>
+                {% else %}
+                <strong class="community-empty-value">아직 평가 없음</strong>
+                <p>이 문제가 도움이 되었는지 알려주세요.</p>
+                {% endif %}
+            </article>
+        </div>
+
+        <div
+            class="community-vote-panel"
+            data-community-vote
+            data-api-url="{{ community_vote_api_url }}"
+            data-problem="{{ problem.key }}"
+        >
+            <div class="community-vote-header">
+                <div>
+                    <p class="community-card-label">이 문제 평가하기</p>
+                    <p>GitHub 로그인 후 이 페이지에서 바로 난이도와 추천 여부를 제출할 수 있습니다.</p>
+                </div>
+                <div class="community-auth">
+                    <button
+                        type="button"
+                        class="button github-login-button"
+                        data-community-login
+                        {% if not community_vote_api_url %}disabled{% endif %}
+                    >GitHub로 로그인</button>
+                    <div class="community-user" data-community-user hidden>
+                        <img data-community-avatar src="" alt="" width="32" height="32">
+                        <span><strong data-community-login-name></strong>님</span>
+                        <button type="button" data-community-logout>로그아웃</button>
+                    </div>
+                </div>
+            </div>
+
+            <form class="community-vote-form" data-community-vote-form>
+                <fieldset data-community-vote-fields disabled>
+                    <div class="community-vote-fields">
+                        <label class="community-difficulty-field">
+                            <span>체감 난이도</span>
+                            <select name="difficulty" required>
+                                <option value="">난이도를 선택하세요</option>
+                                {% for tier_group in community_tier_options %}
+                                <optgroup label="{{ tier_group.group }}">
+                                    {% for tier in tier_group.tiers %}
+                                    <option value="{{ tier.value }}">{{ tier.name }}</option>
+                                    {% endfor %}
+                                </optgroup>
+                                {% endfor %}
+                            </select>
+                        </label>
+
+                        <fieldset class="community-recommendation-field">
+                            <legend>추천 여부</legend>
+                            <div class="recommendation-options">
+                                <label>
+                                    <input type="radio" name="recommendation" value="up" required>
+                                    <span>👍 추천</span>
+                                </label>
+                                <label>
+                                    <input type="radio" name="recommendation" value="down" required>
+                                    <span>👎 비추천</span>
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <button type="submit" class="button button-primary community-submit-button">
+                        평가 제출
+                    </button>
+                </fieldset>
+            </form>
+
+            <p class="community-vote-status" data-community-vote-status role="status" aria-live="polite">
+                {% if community_vote_api_url %}
+                평가하려면 GitHub로 로그인해 주세요.
+                {% else %}
+                평가 API가 아직 설정되지 않았습니다. 저장소 관리자의 Worker 배포가 필요합니다.
+                {% endif %}
+            </p>
+            <p class="community-vote-privacy">
+                평가는 자동으로 저장소 Discussion에 기록되므로 Discussion 화면을 직접 열 필요가 없습니다. 같은 문제를 다시 평가하면 기존 평가가 갱신됩니다.
+            </p>
+        </div>
+    </section>
+
+    <section class="community-comments" aria-labelledby="comments-title">
+        <header class="community-heading comments-heading">
+            <div>
+                <p class="eyebrow">DISCUSSION</p>
+                <h2 id="comments-title">댓글</h2>
+                <p>GitHub 로그인 후 작성할 수 있으며 모든 댓글은 이 저장소의 Discussions에 보관됩니다.</p>
+            </div>
+            {% if comments.discussion_url %}
+            <a href="{{ comments.discussion_url }}" target="_blank" rel="noopener noreferrer">
+                GitHub에서 댓글 {{ comments.comment_count }}개 보기 ↗
+            </a>
+            {% endif %}
+        </header>
+
+        {% set comments_category = community_config.get('comments_category') %}
+        {% if community_config.get('ready') and comments_category and comments_category.get('id') %}
+        <div class="giscus"></div>
+        <script
+            src="https://giscus.app/client.js"
+            data-repo="{{ community_repository }}"
+            data-repo-id="{{ community_config.repository_id }}"
+            data-category="{{ comments_category.name }}"
+            data-category-id="{{ comments_category.id }}"
+            data-mapping="specific"
+            data-term="problem:{{ problem.key }}"
+            data-strict="1"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="light"
+            data-lang="ko"
+            loading="lazy"
+            crossorigin="anonymous"
+            async
+        ></script>
+        {% else %}
+        <div class="community-setup-pending" role="status">
+            <strong>Discussion 연동 준비 중</strong>
+            <p>저장소에서 Discussions와 giscus 설정이 완료되면 이곳에 댓글 입력창이 표시됩니다.</p>
+        </div>
+        {% endif %}
+    </section>
 </div>
 {% endblock %}

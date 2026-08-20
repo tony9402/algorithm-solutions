@@ -1,0 +1,22 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "algorithm-solutions-community",
+	"main": "src/index.js",
+	"compatibility_date": "2026-08-20",
+	"workers_dev": true,
+	"vars": {
+		"GITHUB_REPOSITORY": "tony9402/algorithm-solutions",
+		"RATINGS_CATEGORY": "General",
+		"ALLOWED_ORIGINS": "https://tony9402.github.io,http://127.0.0.1:8765,http://localhost:8765",
+		"SITE_URL": "https://tony9402.github.io/algorithm-solutions"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "COMMUNITY_KV",
+			"id": "bfe96c2880c54df5a41c4f2d51b5a6d2"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
+}

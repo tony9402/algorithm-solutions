@@ -14,7 +14,7 @@ if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
 from pages.announcements import Announcement
-from pages.build import _make_environment, build_site
+from pages.build import _community_tier_options, _make_environment, build_site
 
 
 class _SourceCodeParser(HTMLParser):
@@ -119,6 +119,98 @@ class PagesBuildTest(unittest.TestCase):
                 for item in index
             )
         )
+
+    def test_community_snapshot_is_published_and_problem_ui_is_rendered(self) -> None:
+        source = json.loads(
+            (REPOSITORY_ROOT / "community-data" / "discussions.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        published = json.loads(
+            (self.output / "assets" / "community-data.json").read_text(encoding="utf-8")
+        )
+        problem_html = (
+            self.output / "problems" / "baekjoon" / "1000" / "index.html"
+        ).read_text(encoding="utf-8")
+
+        self.assertEqual(published, source)
+        self.assertIn('id="community"', problem_html)
+        self.assertIn("data-community-vote", problem_html)
+        self.assertIn('data-problem="baekjoon/1000"', problem_html)
+        self.assertIn("GitHub로 로그인", problem_html)
+        self.assertIn("평가 API가 아직 설정되지 않았습니다", problem_html)
+        self.assertEqual(problem_html.count('<option value="'), 31)
+        self.assertIn("Discussion 연동 준비 중", problem_html)
+
+    def test_ready_community_configuration_embeds_problem_specific_giscus(self) -> None:
+        environment = _make_environment(REPOSITORY_ROOT / "pages" / "templates", "")
+        rendered = environment.get_template("problem.html").render(
+            site={
+                "description": "test",
+                "repository_url": "https://github.com/example/repository",
+            },
+            page_title="테스트 문제",
+            active_nav="solutions",
+            problem_count=1,
+            solution_count=1,
+            recent_announcement_ids=[],
+            community_repository="example/repository",
+            community_generated_at="2026-08-20T00:00:00Z",
+            community_vote_api_url="https://community.example.workers.dev",
+            community_tier_options=_community_tier_options(),
+            community_config={
+                "repository_id": "R_repo",
+                "comments_category": {
+                    "id": "DIC_comments",
+                    "name": "Announcements",
+                    "slug": "announcements",
+                },
+                "ready": True,
+            },
+            community={
+                "difficulty": {
+                    "vote_count": 2,
+                    "mean_value": 13.5,
+                    "representative": {
+                        "value": 14,
+                        "name": "Gold II",
+                        "group": "gold",
+                    },
+                    "distribution": {"Gold III": 1, "Gold II": 1},
+                },
+                "recommendation": {
+                    "recommended": 1,
+                    "not_recommended": 1,
+                    "score": 0,
+                    "recommended_percent": 50,
+                },
+                "comments": {
+                    "discussion_url": "https://github.com/example/repository/discussions/10",
+                    "comment_count": 3,
+                },
+            },
+            problem={
+                "key": "baekjoon/1000",
+                "platform": "baekjoon",
+                "platform_label": "Baekjoon",
+                "problem_id": "1000",
+                "title": "A+B",
+                "solution_count": 0,
+                "languages": [],
+                "external_url": "https://www.acmicpc.net/problem/1000",
+                "solutions": [],
+            },
+        )
+
+        self.assertIn('src="https://giscus.app/client.js"', rendered)
+        self.assertIn('data-repo-id="R_repo"', rendered)
+        self.assertIn('data-category-id="DIC_comments"', rendered)
+        self.assertIn('data-term="problem:baekjoon/1000"', rendered)
+        self.assertIn('data-api-url="https://community.example.workers.dev"', rendered)
+        self.assertIn('<option value="30">Ruby I</option>', rendered)
+        self.assertIn("Gold II", rendered)
+        self.assertIn("GitHub에서 댓글 3개 보기", rendered)
+        self.assertNotIn("Discussion 연동 준비 중", rendered)
 
     def test_project_pages_base_path_is_used(self) -> None:
         index_html = (self.output / "index.html").read_text(encoding="utf-8")

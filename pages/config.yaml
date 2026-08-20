@@ -8,6 +8,8 @@ announcements:
   directory: announcements
   recent_days: 7
   timezone: Asia/Seoul
+community:
+  vote_api_url: ""
 validation:
   minimum_solution_count: 549
   minimum_problem_count: 427
