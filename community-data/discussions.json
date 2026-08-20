@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "repository": "tony9402/algorithm-solutions",
+  "configuration": {
+    "repository_id": "R_kgDOLKq8Lg",
+    "comments_category": null,
+    "ratings_category": {
+      "id": null,
+      "name": "General",
+      "slug": "general"
+    },
+    "ready": false
+  },
+  "summary": {
+    "problem_count": 0,
+    "rating_count": 0,
+    "comment_count": 0
+  },
+  "problems": {},
+  "generated_at": null
+}

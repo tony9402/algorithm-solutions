@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import shutil
 import sys
@@ -32,6 +33,8 @@ class SiteBuildError(RuntimeError):
 
 
 HIGHLIGHT_STYLE = "monokai"
+COMMUNITY_TIER_GROUPS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Ruby")
+COMMUNITY_TIER_RANKS = ("V", "IV", "III", "II", "I")
 
 
 @dataclass
@@ -65,6 +68,10 @@ class ProblemPage:
     @property
     def solution_count(self) -> int:
         return len(self.solutions)
+
+    @property
+    def key(self) -> str:
+        return f"{self.platform}/{self.problem_id}"
 
 
 @dataclass(frozen=True)
@@ -225,6 +232,46 @@ def _write_json(path: Path, data: object) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def _load_community_snapshot(path: Path, repository_url: str) -> dict:
+    default = {
+        "schema_version": 1,
+        "repository": repository_url.rstrip("/").removeprefix("https://github.com/"),
+        "configuration": {
+            "comments_category": None,
+            "ratings_category": None,
+            "ready": False,
+        },
+        "summary": {"problem_count": 0, "rating_count": 0, "comment_count": 0},
+        "problems": {},
+        "generated_at": None,
+    }
+    if not path.is_file():
+        return default
+    try:
+        snapshot = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as error:
+        raise SiteBuildError(f"커뮤니티 데이터 JSON이 올바르지 않습니다: {path}: {error}") from error
+    if not isinstance(snapshot, dict) or snapshot.get("schema_version") != 1:
+        raise SiteBuildError(f"지원하지 않는 커뮤니티 데이터 형식입니다: {path}")
+    if not isinstance(snapshot.get("configuration"), dict):
+        raise SiteBuildError(f"커뮤니티 데이터 configuration이 올바르지 않습니다: {path}")
+    if not isinstance(snapshot.get("problems"), dict):
+        raise SiteBuildError(f"커뮤니티 데이터 problems가 올바르지 않습니다: {path}")
+    return snapshot
+
+
+def _community_tier_options() -> list[dict[str, object]]:
+    options: list[dict[str, object]] = []
+    value = 1
+    for group in COMMUNITY_TIER_GROUPS:
+        tiers = []
+        for rank in COMMUNITY_TIER_RANKS:
+            tiers.append({"value": value, "name": f"{group} {rank}"})
+            value += 1
+        options.append({"group": group, "tiers": tiers})
+    return options
+
+
 def build_site(
     repository_root: Path,
     config_path: Path,
@@ -254,6 +301,22 @@ def build_site(
     pages_directory = repository_root / "pages"
     environment = _make_environment(pages_directory / "templates", base_path)
     site_config = config.get("site", {})
+    repository_url = str(site_config.get("repository_url", "")).strip()
+    community_settings = config.get("community", {})
+    if not isinstance(community_settings, dict):
+        raise SiteBuildError("community 설정은 mapping이어야 합니다.")
+    community_vote_api_url = (
+        os.environ.get("COMMUNITY_VOTE_API_URL")
+        or str(community_settings.get("vote_api_url", ""))
+    ).strip().rstrip("/")
+    if community_vote_api_url and not community_vote_api_url.startswith(("https://", "http://")):
+        raise SiteBuildError("community.vote_api_url은 절대 HTTP(S) URL이어야 합니다.")
+    community_snapshot = _load_community_snapshot(
+        repository_root / "community-data" / "discussions.json",
+        repository_url,
+    )
+    community_config = community_snapshot["configuration"]
+    community_problems = community_snapshot["problems"]
     announcement_config = config.get("announcements", {})
     try:
         timezone = ZoneInfo(str(announcement_config.get("timezone", "Asia/Seoul")))
@@ -288,6 +351,11 @@ def build_site(
         "problem_count": len(problems),
         "solution_count": len(solutions),
         "recent_announcement_ids": recent_announcement_ids,
+        "community_config": community_config,
+        "community_repository": community_snapshot.get("repository", ""),
+        "community_generated_at": community_snapshot.get("generated_at"),
+        "community_vote_api_url": community_vote_api_url,
+        "community_tier_options": _community_tier_options(),
     }
 
     if output_path.exists():
@@ -352,6 +420,7 @@ def build_site(
                 page_title=f"{problem.title} · {site_config.get('title', 'Algorithm Solutions')}",
                 active_nav="solutions",
                 problem=problem,
+                community=community_problems.get(problem.key, {}),
             ),
             encoding="utf-8",
         )
@@ -384,6 +453,7 @@ def build_site(
         for problem in problems
     ]
     _write_json(static_output / "search-index.json", search_index)
+    _write_json(static_output / "community-data.json", community_snapshot)
 
     warning_counts = Counter(item.code for item in warnings)
     if warnings:

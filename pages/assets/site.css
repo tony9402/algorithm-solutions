@@ -954,6 +954,419 @@ select {
     color: var(--muted);
 }
 
+.community-section,
+.community-comments {
+    margin-top: 30px;
+    padding: 30px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-large);
+    background: var(--surface);
+    box-shadow: 0 10px 34px rgba(23, 32, 51, 0.05);
+}
+
+.community-comments {
+    margin-top: 22px;
+}
+
+.community-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.community-heading h2 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: -0.035em;
+}
+
+.community-heading p:not(.eyebrow) {
+    max-width: 670px;
+    margin: 7px 0 0;
+    color: var(--muted);
+}
+
+.community-heading > a {
+    flex: none;
+    color: var(--brand);
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.community-updated {
+    flex: none;
+    text-align: right;
+    font-size: 11px;
+}
+
+.community-updated time {
+    display: block;
+    margin-top: 3px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+}
+
+.community-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.community-summary-card {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-medium);
+    background: linear-gradient(145deg, #fff, #f8faff);
+}
+
+.community-card-label {
+    margin: 0 0 14px;
+    color: var(--subtle);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.community-summary-card > p:last-child {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.tier-badge {
+    display: inline-flex;
+    min-height: 37px;
+    align-items: center;
+    padding: 0 14px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 850;
+}
+
+.tier-bronze {
+    border-color: #c9835a;
+    background: #fff4ec;
+    color: #8c4525;
+}
+
+.tier-silver {
+    border-color: #9da7b7;
+    background: #f2f5f8;
+    color: #596475;
+}
+
+.tier-gold {
+    border-color: #e4b443;
+    background: #fff8d9;
+    color: #8d6400;
+}
+
+.tier-platinum {
+    border-color: #47bca6;
+    background: #e8faf6;
+    color: #137865;
+}
+
+.tier-diamond {
+    border-color: #5395e8;
+    background: #eaf4ff;
+    color: #1e67b9;
+}
+
+.tier-ruby {
+    border-color: #dd4e78;
+    background: #fff0f5;
+    color: #a41f4a;
+}
+
+.community-empty-value {
+    display: block;
+    color: var(--muted);
+    font-size: 19px;
+}
+
+.vote-distribution {
+    margin-top: 14px;
+    font-size: 13px;
+}
+
+.vote-distribution summary {
+    width: max-content;
+    color: var(--brand);
+    cursor: pointer;
+    font-weight: 750;
+}
+
+.vote-distribution ul {
+    display: grid;
+    gap: 6px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.vote-distribution li {
+    display: flex;
+    max-width: 230px;
+    justify-content: space-between;
+    gap: 20px;
+    color: var(--muted);
+}
+
+.vote-distribution li strong {
+    color: var(--ink);
+}
+
+.recommendation-counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px 18px;
+}
+
+.recommendation-counts span {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.recommendation-counts strong {
+    color: var(--ink);
+    font-size: 17px;
+}
+
+.recommendation-meter {
+    height: 9px;
+    margin-top: 17px;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #f4ccd5;
+}
+
+.recommendation-meter span {
+    display: block;
+    width: var(--recommend-percent);
+    height: 100%;
+    border-radius: inherit;
+    background: #4c9a6a;
+}
+
+.community-vote-panel {
+    margin-top: 16px;
+    padding: 22px;
+    border-radius: var(--radius-medium);
+    background: #eef3ff;
+}
+
+.community-vote-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.community-vote-header p:not(.community-card-label) {
+    margin: -5px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.community-auth {
+    flex: none;
+}
+
+.github-login-button {
+    border: 1px solid #1f2937;
+    background: #1f2937;
+    color: #fff;
+}
+
+.github-login-button:hover:not(:disabled),
+.github-login-button:focus-visible:not(:disabled) {
+    background: #111827;
+}
+
+.github-login-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.community-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.community-user img {
+    border-radius: 50%;
+    background: #d8e0f2;
+}
+
+.community-user span {
+    font-size: 13px;
+}
+
+.community-user button {
+    padding: 4px 7px;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 11px;
+    text-decoration: underline;
+}
+
+.community-vote-form {
+    margin-top: 20px;
+}
+
+.community-vote-form > fieldset,
+.community-recommendation-field {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.community-vote-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
+}
+
+.community-difficulty-field > span,
+.community-recommendation-field legend {
+    display: block;
+    margin-bottom: 7px;
+    color: #38435a;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.community-difficulty-field select {
+    width: 100%;
+    height: 46px;
+    padding: 0 38px 0 13px;
+    border: 1px solid #c8d3eb;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+}
+
+.community-difficulty-field select:focus {
+    border-color: var(--brand);
+    outline: 3px solid rgba(49, 87, 213, 0.15);
+}
+
+.recommendation-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.recommendation-options label {
+    position: relative;
+}
+
+.recommendation-options input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.recommendation-options span {
+    display: flex;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #c8d3eb;
+    border-radius: 10px;
+    background: #fff;
+    color: #4d5a70;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.recommendation-options input:checked + span {
+    border-color: var(--brand);
+    background: #dfe8ff;
+    color: #173b9c;
+    box-shadow: inset 0 0 0 1px var(--brand);
+}
+
+.recommendation-options input:focus-visible + span {
+    outline: 3px solid rgba(49, 87, 213, 0.25);
+    outline-offset: 2px;
+}
+
+.community-vote-form fieldset:disabled select,
+.community-vote-form fieldset:disabled .recommendation-options span {
+    cursor: not-allowed;
+    opacity: 0.58;
+}
+
+.community-submit-button {
+    width: 100%;
+    margin-top: 14px;
+}
+
+.community-submit-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.community-vote-status {
+    margin: 13px 0 0;
+    color: #53617a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.community-vote-status[data-tone="success"] {
+    color: #167246;
+}
+
+.community-vote-status[data-tone="error"] {
+    color: #b4233b;
+}
+
+.community-vote-privacy {
+    margin: 5px 0 0;
+    color: var(--subtle);
+    font-size: 11px;
+}
+
+.comments-heading {
+    margin-bottom: 24px;
+}
+
+.giscus,
+.giscus-frame {
+    width: 100%;
+}
+
+.community-setup-pending {
+    padding: 24px;
+    border: 1px dashed #b9c3d5;
+    border-radius: var(--radius-medium);
+    background: var(--surface-soft);
+    text-align: center;
+}
+
+.community-setup-pending strong {
+    font-size: 16px;
+}
+
+.community-setup-pending p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
 .not-found {
     min-height: calc(100vh - 190px);
     display: flex;
@@ -1158,6 +1571,34 @@ select {
     .source-code {
         padding: 18px;
         font-size: 12px;
+    }
+
+    .community-section,
+    .community-comments {
+        padding: 22px;
+    }
+
+    .community-heading,
+    .community-vote-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .community-updated {
+        text-align: left;
+    }
+
+    .community-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .community-auth,
+    .community-auth .button {
+        width: 100%;
+    }
+
+    .community-vote-fields {
+        grid-template-columns: 1fr;
     }
 
     .footer-inner {

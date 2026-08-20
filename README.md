@@ -14,6 +14,13 @@
 - 문제 번호와 제목을 검색하고 플랫폼·언어로 필터링할 수 있으며, 결과는 30개씩 표시됩니다.
 - 작성자·공동 작성자·제출 링크와 풀이 설명은 코드에서 분리해서 보여줍니다.
 - 저장소의 `announcements/*.md`에 올린 공지는 사이트의 공지사항 탭에서 모아볼 수 있습니다.
+- 문제 페이지에서 GitHub 로그인 기반 댓글, solved.ac 30단계 난이도 평가, 추천·비추천 집계를 확인할 수 있습니다.
+
+### GitHub Discussions 커뮤니티 기능
+
+댓글과 평가는 문제 페이지 안에서 작성합니다. GitHub 로그인 뒤 제출한 평가는 백그라운드에서 GitHub Discussions에 저장되고, 매일 GitHub Actions가 `community-data/discussions.json`으로 동기화합니다. 따라서 사용자가 Discussion 화면으로 이동할 필요가 없으며, 평가 기록은 저장소를 clone한 뒤에도 확인할 수 있습니다.
+
+저장소 관리자가 처음 기능을 활성화할 때 필요한 GitHub App·Cloudflare Worker·Discussions·giscus 설정은 [`community-worker/README.md`](community-worker/README.md), 데이터 형식과 동기화 방식은 [`community-data/README.md`](community-data/README.md)를 참고하세요.
 
 
 # 📕 문제 풀이 컨트리뷰트 가이드라인
