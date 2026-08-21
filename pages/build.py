@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -92,6 +93,19 @@ def normalise_base_path(value: str) -> str:
     if any(part in {".", ".."} for part in parts):
         raise SiteBuildError(f"base path에 상대 경로를 사용할 수 없습니다: {value}")
     return "/" + "/".join(parts)
+
+
+def _site_build_id() -> str:
+    value = os.environ.get("SITE_BUILD_ID", "local").strip()
+    value = re.sub(r"[^a-zA-Z0-9._-]+", "-", value).strip("-")
+    return value[:160] or "local"
+
+
+def _fingerprint_asset(path: Path) -> str:
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+    fingerprinted = path.with_name(f"{path.stem}.{digest}{path.suffix}")
+    shutil.copy2(path, fingerprinted)
+    return fingerprinted.name
 
 
 def _anchor(filename: str) -> str:
@@ -348,6 +362,7 @@ def build_site(
     context = {
         "site": site_config,
         "base_path": base_path,
+        "build_id": _site_build_id(),
         "problem_count": len(problems),
         "solution_count": len(solutions),
         "recent_announcement_ids": recent_announcement_ids,
@@ -369,6 +384,15 @@ def build_site(
         formatter.get_style_defs(".highlight") + "\n",
         encoding="utf-8",
     )
+    context["asset_paths"] = {
+        key: f"assets/{_fingerprint_asset(static_output / filename)}"
+        for key, filename in {
+            "favicon": "favicon.svg",
+            "site_css": "site.css",
+            "highlight_css": "highlight.css",
+            "site_js": "site.js",
+        }.items()
+    }
 
     index_template = environment.get_template("index.html")
     platform_options = [

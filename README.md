@@ -16,6 +16,8 @@
 - 저장소의 `announcements/*.md`에 올린 공지는 사이트의 공지사항 탭에서 모아볼 수 있습니다.
 - 문제 페이지에서 GitHub 로그인 기반 댓글, solved.ac 30단계 난이도 평가, 추천·비추천 집계를 확인할 수 있습니다.
 
+GitHub Pages는 공개 HTML을 CDN에 최대 10분 캐시합니다. 사이트 빌드는 CSS·JavaScript 파일명에 내용 해시를 붙여 이전 자산과 섞이지 않게 하며, 배포 workflow는 공개 페이지에서 새 빌드 ID가 확인된 뒤에만 성공으로 종료됩니다. 따라서 배포 직후에는 강제 새로고침을 반복하기보다 `GitHub Pages` workflow의 `Verify public deployment revision` 단계가 끝났는지 확인하세요.
+
 ### GitHub Discussions 커뮤니티 기능
 
 댓글과 평가는 문제 페이지 안에서 작성합니다. GitHub 로그인 뒤 제출한 평가는 백그라운드에서 GitHub Discussions에 저장되고, 매일 GitHub Actions가 `community-data/discussions.json`으로 동기화합니다. 따라서 사용자가 Discussion 화면으로 이동할 필요가 없으며, 평가 기록은 저장소를 clone한 뒤에도 확인할 수 있습니다.

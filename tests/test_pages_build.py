@@ -7,6 +7,7 @@ import unittest
 from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
+from unittest import mock
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +16,14 @@ if str(REPOSITORY_ROOT) not in sys.path:
 
 from pages.announcements import Announcement
 from pages.build import _community_tier_options, _make_environment, build_site
+
+
+TEMPLATE_ASSET_PATHS = {
+    "favicon": "assets/favicon.test.svg",
+    "site_css": "assets/site.test.css",
+    "highlight_css": "assets/highlight.test.css",
+    "site_js": "assets/site.test.js",
+}
 
 
 class _SourceCodeParser(HTMLParser):
@@ -77,12 +86,13 @@ class PagesBuildTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.temporary_directory = tempfile.TemporaryDirectory()
         cls.output = Path(cls.temporary_directory.name) / "site"
-        cls.result = build_site(
-            REPOSITORY_ROOT,
-            REPOSITORY_ROOT / "pages" / "config.yaml",
-            cls.output,
-            "/algorithm-solutions",
-        )
+        with mock.patch.dict("os.environ", {"SITE_BUILD_ID": "test-build-123"}):
+            cls.result = build_site(
+                REPOSITORY_ROOT,
+                REPOSITORY_ROOT / "pages" / "config.yaml",
+                cls.output,
+                "/algorithm-solutions",
+            )
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -151,6 +161,8 @@ class PagesBuildTest(unittest.TestCase):
             },
             page_title="테스트 문제",
             active_nav="solutions",
+            build_id="test-build",
+            asset_paths=TEMPLATE_ASSET_PATHS,
             problem_count=1,
             solution_count=1,
             recent_announcement_ids=[],
@@ -216,18 +228,24 @@ class PagesBuildTest(unittest.TestCase):
 
     def test_project_pages_base_path_is_used(self) -> None:
         index_html = (self.output / "index.html").read_text(encoding="utf-8")
-        self.assertIn('href="/algorithm-solutions/assets/site.css"', index_html)
+        self.assertRegex(
+            index_html,
+            r'href="/algorithm-solutions/assets/site\.[0-9a-f]{12}\.css"',
+        )
         self.assertIn('href="/algorithm-solutions/problems/baekjoon/1000/"', index_html)
         self.assertIn('href="/algorithm-solutions/announcements/"', index_html)
 
-    def test_pages_include_browser_cache_control_meta(self) -> None:
+    def test_pages_embed_build_id_and_fingerprinted_assets(self) -> None:
         index_html = (self.output / "index.html").read_text(encoding="utf-8")
-        self.assertIn(
-            '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">',
-            index_html,
-        )
-        self.assertIn('<meta http-equiv="Pragma" content="no-cache">', index_html)
-        self.assertIn('<meta http-equiv="Expires" content="0">', index_html)
+        self.assertIn('<meta name="site-build-id" content="test-build-123">', index_html)
+        self.assertRegex(index_html, r'/assets/site\.[0-9a-f]{12}\.css')
+        self.assertRegex(index_html, r'/assets/highlight\.[0-9a-f]{12}\.css')
+        self.assertRegex(index_html, r'/assets/site\.[0-9a-f]{12}\.js')
+        self.assertRegex(index_html, r'/assets/favicon\.[0-9a-f]{12}\.svg')
+        self.assertTrue((self.output / "assets" / "site.css").is_file())
+        self.assertTrue((self.output / "assets" / "site.js").is_file())
+        self.assertIn("this.href='/algorithm-solutions/assets/site.css'", index_html)
+        self.assertIn("this.src='/algorithm-solutions/assets/site.js'", index_html)
 
     def test_announcements_render_as_closed_collapsible_title_list(self) -> None:
         environment = _make_environment(REPOSITORY_ROOT / "pages" / "templates", "")
@@ -238,6 +256,8 @@ class PagesBuildTest(unittest.TestCase):
             },
             page_title="공지사항",
             active_nav="announcements",
+            build_id="test-build",
+            asset_paths=TEMPLATE_ASSET_PATHS,
             problem_count=1,
             solution_count=1,
             recent_announcement_ids=["test-notice"],

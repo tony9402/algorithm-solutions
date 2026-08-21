@@ -46,6 +46,8 @@ jobs:
     name: pages-build
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    outputs:
+      build-id: ${{ steps.build-metadata.outputs.build-id }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -68,10 +70,16 @@ jobs:
       - name: Test community Worker
         run: node --test community-worker/test/worker.test.mjs
 
+      - name: Create build identifier
+        id: build-metadata
+        shell: bash
+        run: echo "build-id=${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
+
       - name: Build static site
         run: python pages/build.py
         env:
           COMMUNITY_VOTE_API_URL: ${{ vars.COMMUNITY_VOTE_API_URL }}
+          SITE_BUILD_ID: ${{ steps.build-metadata.outputs.build-id }}
 
       - name: Configure GitHub Pages
         if: github.event_name != 'pull_request'
@@ -102,3 +110,24 @@ jobs:
       - name: Deploy GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+      - name: Verify public deployment revision
+        shell: bash
+        env:
+          EXPECTED_BUILD_ID: ${{ needs.build.outputs.build-id }}
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          for attempt in {1..60}; do
+              html="$(curl --fail --silent --show-error \
+                  --header "Cache-Control: no-cache" \
+                  "$PAGE_URL")" || true
+              marker="name=\"site-build-id\" content=\"${EXPECTED_BUILD_ID}\""
+              if [[ "$html" == *"$marker"* ]]; then
+                  echo "Public Pages revision verified: ${EXPECTED_BUILD_ID}"
+                  exit 0
+              fi
+              echo "Waiting for GitHub Pages CDN propagation (${attempt}/60)"
+              sleep 10
+          done
+          echo "GitHub Pages did not expose ${EXPECTED_BUILD_ID} within 10 minutes." >&2
+          exit 1
