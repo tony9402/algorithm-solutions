@@ -3,16 +3,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <meta name="site-build-id" content="{{ build_id }}">
     <meta name="description" content="{{ site.description }}">
     <meta name="color-scheme" content="light">
     <title>{{ page_title }}</title>
-    <link rel="icon" href="{{ url_for('assets/favicon.svg') }}" type="image/svg+xml">
-    <link rel="stylesheet" href="{{ url_for('assets/site.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets/highlight.css') }}">
-    <script defer src="{{ url_for('assets/site.js') }}"></script>
+    <link rel="icon" href="{{ url_for(asset_paths.favicon) }}" type="image/svg+xml">
+    <link
+        rel="stylesheet"
+        href="{{ url_for(asset_paths.site_css) }}"
+        onerror="this.onerror=null;this.href='{{ url_for('assets/site.css') }}'"
+    >
+    <link
+        rel="stylesheet"
+        href="{{ url_for(asset_paths.highlight_css) }}"
+        onerror="this.onerror=null;this.href='{{ url_for('assets/highlight.css') }}'"
+    >
+    <script
+        defer
+        src="{{ url_for(asset_paths.site_js) }}"
+        onerror="this.onerror=null;this.src='{{ url_for('assets/site.js') }}'"
+    ></script>
 </head>
 <body data-page="{{ active_nav|default('') }}">
     <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
