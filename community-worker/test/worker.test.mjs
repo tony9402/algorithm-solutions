@@ -145,6 +145,22 @@ test("CORS preflight는 secret이 없어도 처리한다", async () => {
 });
 
 
+test("health 응답으로 프런트엔드 호환 API 버전을 확인한다", async () => {
+    const response = await worker.fetch(
+        new Request("https://community.example.workers.dev/health", {
+            headers: {Origin: "https://example.github.io"},
+        }),
+        workerEnv(),
+    );
+    const payload = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(payload.ok, true);
+    assert.equal(payload.apiVersion, 2);
+    assert.equal(payload.repository, "example/repository");
+});
+
+
 test("웹 평가를 로그인 사용자 명의의 Discussion으로 저장한다", async () => {
     const kv = new MemoryKv({
         "session:web-session": JSON.stringify({

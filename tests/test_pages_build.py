@@ -150,7 +150,20 @@ class PagesBuildTest(unittest.TestCase):
         self.assertIn("GitHub로 로그인", problem_html)
         self.assertIn("평가 API가 아직 설정되지 않았습니다", problem_html)
         self.assertEqual(problem_html.count('<option value="'), 31)
-        self.assertIn("Discussion 연동 준비 중", problem_html)
+        configuration = source.get("configuration", {})
+        comments_category = configuration.get("comments_category") or {}
+        if configuration.get("ready") and comments_category.get("id"):
+            self.assertIn('src="https://giscus.app/client.js"', problem_html)
+            self.assertIn(
+                f'data-repo-id="{configuration["repository_id"]}"', problem_html
+            )
+            self.assertIn(
+                f'data-category-id="{comments_category["id"]}"', problem_html
+            )
+            self.assertNotIn("Discussion 연동 준비 중", problem_html)
+        else:
+            self.assertNotIn('src="https://giscus.app/client.js"', problem_html)
+            self.assertIn("Discussion 연동 준비 중", problem_html)
 
     def test_ready_community_configuration_embeds_problem_specific_giscus(self) -> None:
         environment = _make_environment(REPOSITORY_ROOT / "pages" / "templates", "")
