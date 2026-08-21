@@ -48,6 +48,14 @@ npx wrangler secret put GITHUB_CLIENT_SECRET
 npm run deploy
 ```
 
+이후 `community-worker/` 코드가 바뀔 때도 Pages 배포와 별개로 `npm run deploy`를 다시 실행해야 합니다. Pages만 갱신하면 새 프런트엔드가 아직 배포되지 않은 API 경로를 호출할 수 있습니다. 배포 확인은 다음처럼 하며, 현재 프런트엔드는 `apiVersion` 2 이상이 필요합니다.
+
+```bash
+curl https://<Worker 주소>/health
+```
+
+응답에 `"apiVersion":2`가 없거나 로그인 뒤 `API 경로를 찾을 수 없습니다.`가 표시되면 Worker가 이전 버전이므로 다시 배포합니다. Wrangler secret은 Worker를 다시 배포해도 그대로 유지됩니다.
+
 ### 4. Pages에 API 주소 연결
 
 GitHub 저장소의 `Settings > Secrets and variables > Actions > Variables`에 다음 repository variable을 추가합니다.

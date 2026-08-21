@@ -190,6 +190,7 @@
         const difficultySelect = form.elements.namedItem("difficulty");
         const recommendationInputs = [...form.querySelectorAll("[name='recommendation']")];
         const sessionKey = "algorithm-solutions-community-session-v1";
+        const minimumApiVersion = 2;
         let sessionToken = sessionStorage.getItem(sessionKey) || "";
         let oauthError = "";
 
@@ -208,6 +209,12 @@
             avatar.src = user.avatarUrl || "";
             avatar.alt = `${user.login} 프로필 이미지`;
             loginName.textContent = user.login;
+        };
+
+        const clearSession = () => {
+            sessionToken = "";
+            sessionStorage.removeItem(sessionKey);
+            setUser(null);
         };
 
         const apiRequest = async (path, options = {}) => {
@@ -249,9 +256,7 @@
             } catch {
                 // 로컬 세션은 API 응답과 관계없이 제거한다.
             }
-            sessionToken = "";
-            sessionStorage.removeItem(sessionKey);
-            setUser(null);
+            clearSession();
             setStatus("로그아웃했습니다. 평가하려면 다시 로그인해 주세요.");
         });
 
@@ -283,9 +288,7 @@
                 );
             } catch (error) {
                 if (error.status === 401) {
-                    sessionToken = "";
-                    sessionStorage.removeItem(sessionKey);
-                    setUser(null);
+                    clearSession();
                 }
                 setStatus(error.message, "error");
             } finally {
@@ -299,6 +302,28 @@
                 setUser(null);
                 return;
             }
+            loginButton.disabled = true;
+            try {
+                const health = await apiRequest("/health");
+                const apiVersion = Number(health.apiVersion);
+                if (!Number.isInteger(apiVersion) || apiVersion < minimumApiVersion) {
+                    const error = new Error(
+                        "평가 API가 이전 버전입니다. 저장소 관리자가 Worker를 다시 배포해야 합니다.",
+                    );
+                    error.code = "OUTDATED_API";
+                    throw error;
+                }
+                loginButton.disabled = false;
+            } catch (error) {
+                setUser(null);
+                setStatus(
+                    error.status === 404 || error.code === "OUTDATED_API"
+                        ? "평가 API가 이전 버전입니다. 저장소 관리자가 Worker를 다시 배포해야 합니다."
+                        : error.message || "평가 API에 연결할 수 없습니다.",
+                    "error",
+                );
+                return;
+            }
             if (!sessionToken) {
                 setUser(null);
                 if (!oauthError) setStatus("평가하려면 GitHub로 로그인해 주세요.");
@@ -307,20 +332,30 @@
             try {
                 const session = await apiRequest("/session");
                 setUser(session.user);
-                const saved = await apiRequest(`/vote?problem=${encodeURIComponent(problem)}`);
-                if (saved.vote) {
-                    difficultySelect.value = String(saved.vote.difficulty);
-                    recommendationInputs.forEach((input) => {
-                        input.checked = input.value === saved.vote.recommendation;
-                    });
-                    setStatus(`${session.user.login} 계정의 기존 평가를 불러왔습니다. 수정 후 다시 제출할 수 있습니다.`);
-                } else {
-                    setStatus(`${session.user.login} 계정으로 로그인했습니다.`);
+                try {
+                    const saved = await apiRequest(`/vote?problem=${encodeURIComponent(problem)}`);
+                    if (saved.vote) {
+                        difficultySelect.value = String(saved.vote.difficulty);
+                        recommendationInputs.forEach((input) => {
+                            input.checked = input.value === saved.vote.recommendation;
+                        });
+                        setStatus(`${session.user.login} 계정의 기존 평가를 불러왔습니다. 수정 후 다시 제출할 수 있습니다.`);
+                    } else {
+                        setStatus(`${session.user.login} 계정으로 로그인했습니다.`);
+                    }
+                } catch (error) {
+                    if (error.status === 401) {
+                        clearSession();
+                        setStatus(error.message, "error");
+                        return;
+                    }
+                    setStatus(
+                        `${session.user.login} 계정으로 로그인했지만 기존 평가를 불러오지 못했습니다. ${error.message}`,
+                        "error",
+                    );
                 }
             } catch (error) {
-                sessionToken = "";
-                sessionStorage.removeItem(sessionKey);
-                setUser(null);
+                if (error.status === 401) clearSession();
                 setStatus(error.message, "error");
             }
         };

@@ -3,6 +3,7 @@ const GITHUB_GRAPHQL_URL = "https://api.github.com/graphql";
 const GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize";
 const GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token";
 const API_VERSION = "2026-03-10";
+const COMMUNITY_API_VERSION = 2;
 const OAUTH_STATE_TTL_SECONDS = 10 * 60;
 const SESSION_TTL_SECONDS = 30 * 24 * 60 * 60;
 const VOTE_RATE_LIMIT_SECONDS = 60;
@@ -520,7 +521,11 @@ const route = async (request, env) => {
     }
     requireConfiguration(env);
     if (request.method === "GET" && url.pathname === "/health") {
-        return jsonResponse(request, env, {ok: true, repository: env.GITHUB_REPOSITORY});
+        return jsonResponse(request, env, {
+            ok: true,
+            apiVersion: COMMUNITY_API_VERSION,
+            repository: env.GITHUB_REPOSITORY,
+        });
     }
     if (request.method === "GET" && url.pathname === "/auth/start") {
         return handleAuthStart(request, env);
